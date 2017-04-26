@@ -1,0 +1,50 @@
+{
+  "name" : "yiisoft/yii2-app-advanced",
+  "description" : "Yii 2 Advanced Application Template",
+  "require" : {
+    "php" : ">=5.4.0",
+    "yiisoft/yii2" : ">=2.0.4",
+    "yiisoft/yii2-bootstrap" : "*",
+    "yiisoft/yii2-swiftmailer" : "*",
+    "phpoffice/phpexcel" : "=1.8.0",
+    "wenyuan/yii2-ueditor" : "dev-master",
+    "2amigos/yii2-qrcode-helper" : "*",
+    "kartik-v/yii2-widgets" : "=v3.4.0",
+    "packaged/thrift" : "=0.9.2.1",
+     "paranoiq/php-zip": "dev-master"
+    
+  },
+  "require-dev" : {
+    "yiisoft/yii2-codeception" : "*",
+    "yiisoft/yii2-debug" : "*",
+    "yiisoft/yii2-gii" : "*",
+    "yiisoft/yii2-faker" : "*"
+  },
+  "support" : {
+    "issues" : "https://github.com/yiisoft/yii2/issues?state=open",
+    "forum" : "http://www.yiiframework.com/forum/",
+    "wiki" : "http://www.yiiframework.com/wiki/",
+    "irc" : "irc://irc.freenode.net/yii",
+    "source" : "https://github.com/yiisoft/yii2"
+  },
+  "keywords" : [ "yii2", "framework", "advanced", "application template" ],
+  "minimum-stability" : "stable",
+  "extra" : {
+    "asset-installer-paths" : {
+      "npm-asset-library" : "vendor/npm",
+      "bower-asset-library" : "vendor/bower"
+    }
+  },
+  "config" : {
+    "process-timeout" : 1800
+  },
+  "license" : "BSD-3-Clause",
+  "type" : "project",
+  "homepage" : "http://www.yiiframework.com/",
+  "repositories": {
+    "packagist": {
+      "type": "composer",
+      "url": "https://packagist.phpcomposer.com"
+    }
+  }
+}
