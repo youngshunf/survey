@@ -8,7 +8,7 @@ use common\models\CommonUtil;
 		position: relative;
 		}
 </style>
-    <div class="hide question_name" name="<?= $task->name?>" task_guid="<?= $task->task_guid?>" answer_guid="<?= $answer->answer_guid ?>"></div>
+    <div class="hide question_name" name="<?= $task->name?>" task_guid="<?= $task->task_guid?>" answer_guid="<?= $answer->answer_guid ?>" offline_save="<?=$answer->offline_save?>"></div>
     <?php if(empty($question)){?>
         <ul class="mui-table-view" >
 				<li class="mui-table-view-cell task-list"  >
@@ -51,6 +51,7 @@ use common\models\CommonUtil;
 				</ul> 
 				<div class="action-container">
 				 <?php if($k==($count-1)){?>
+				   <?php if($answer->offline_save==0){?>
 				     <p class="mui-content-padded ">
 				      <button class="mui-btn mui-btn-primary pull-left preview"  type="<?= $v->type?>"  task_guid="<?= $v->task_guid?>" question_guid="<?= $v->question_guid?>" code="<?= $v->code?>"> 上一页 </button>
 				     </p>
@@ -59,6 +60,11 @@ use common\models\CommonUtil;
 					 <button class="mui-btn mui-btn-warning  save" >离线保存</button>
 					 <button class="mui-btn mui-btn-primary submit"  type="<?= $v->type?>"  task_guid="<?= $v->task_guid?>" question_guid="<?= $v->question_guid?>" code="<?= $v->code?>"> 立即提交 </button>
 					</p>
+					<?php }else{?>
+					<p class="mui-content-padded center" >
+					 <button class="mui-btn mui-btn-primary submit"  type="<?= $v->type?>"  task_guid="<?= $v->task_guid?>" question_guid="<?= $v->question_guid?>" code="<?= $v->code?>"> 立即提交 </button>
+					</p>
+					<?php }?>
 					 <?php }else{?>
 					 <p class="mui-content-padded center" >
 					 <?php if($k!=0){?>
@@ -96,7 +102,8 @@ use common\models\CommonUtil;
 				</ul>
 				<div class="action-container">
 				 <?php if($k==($count-1)){?>
-				 <p class="mui-content-padded ">
+				 	<?php if($answer->offline_save==0){?>
+				     <p class="mui-content-padded ">
 				      <button class="mui-btn mui-btn-primary pull-left preview"  type="<?= $v->type?>"  task_guid="<?= $v->task_guid?>" question_guid="<?= $v->question_guid?>" code="<?= $v->code?>"> 上一页 </button>
 				     </p>
 				     <p class="clear"></p>
@@ -104,6 +111,11 @@ use common\models\CommonUtil;
 					 <button class="mui-btn mui-btn-warning  save" >离线保存</button>
 					 <button class="mui-btn mui-btn-primary submit"  type="<?= $v->type?>"  task_guid="<?= $v->task_guid?>" question_guid="<?= $v->question_guid?>" code="<?= $v->code?>"> 立即提交 </button>
 					</p>
+					<?php }else{?>
+					<p class="mui-content-padded center" >
+					 <button class="mui-btn mui-btn-primary submit"  type="<?= $v->type?>"  task_guid="<?= $v->task_guid?>" question_guid="<?= $v->question_guid?>" code="<?= $v->code?>"> 立即提交 </button>
+					</p>
+					<?php }?>
 					 <?php }else{?>
 					 <p class="mui-content-padded center" >
 					  <?php if($k!=0){?>
@@ -133,14 +145,20 @@ use common\models\CommonUtil;
         				</ul>
                     			<div class="action-container">
             				 <?php if($k==($count-1)){?>
-            				 <p class="mui-content-padded ">
+            				 <?php if($answer->offline_save==0){?>
+				     <p class="mui-content-padded ">
 				      <button class="mui-btn mui-btn-primary pull-left preview"  type="<?= $v->type?>"  task_guid="<?= $v->task_guid?>" question_guid="<?= $v->question_guid?>" code="<?= $v->code?>"> 上一页 </button>
 				     </p>
 				     <p class="clear"></p>
-            					 <p class="mui-content-padded center" >
-            					 <button class="mui-btn mui-btn-warning  save" >离线保存</button>
-            					 <button class="mui-btn mui-btn-primary submit"  type="<?= $v->type?>"  task_guid="<?= $v->task_guid?>" question_guid="<?= $v->question_guid?>" code="<?= $v->code?>"> 立即提交 </button>
-            					</p>
+					 <p class="mui-content-padded center" >
+					 <button class="mui-btn mui-btn-warning  save" >离线保存</button>
+					 <button class="mui-btn mui-btn-primary submit"  type="<?= $v->type?>"  task_guid="<?= $v->task_guid?>" question_guid="<?= $v->question_guid?>" code="<?= $v->code?>"> 立即提交 </button>
+					</p>
+					<?php }else{?>
+					<p class="mui-content-padded center" >
+					 <button class="mui-btn mui-btn-primary submit"  type="<?= $v->type?>"  task_guid="<?= $v->task_guid?>" question_guid="<?= $v->question_guid?>" code="<?= $v->code?>"> 立即提交 </button>
+					</p>
+					<?php }?>
             					 <?php }else{?>
             					 <p class="mui-content-padded center" >
             					  <?php if($k!=0){?>
@@ -182,6 +200,7 @@ use common\models\CommonUtil;
         				</ul>
         				<div class="action-container">
 				 <?php if($k==($count-1)){?>
+				     <?php if($answer->offline_save==0){?>
 				     <p class="mui-content-padded ">
 				      <button class="mui-btn mui-btn-primary pull-left preview"  type="<?= $v->type?>"  task_guid="<?= $v->task_guid?>" question_guid="<?= $v->question_guid?>" code="<?= $v->code?>"> 上一页 </button>
 				     </p>
@@ -190,6 +209,11 @@ use common\models\CommonUtil;
 					 <button class="mui-btn mui-btn-warning  save" >离线保存</button>
 					 <button class="mui-btn mui-btn-primary submit"  type="<?= $v->type?>"  task_guid="<?= $v->task_guid?>" question_guid="<?= $v->question_guid?>" code="<?= $v->code?>"> 立即提交 </button>
 					</p>
+					<?php }else{?>
+					<p class="mui-content-padded center" >
+					 <button class="mui-btn mui-btn-primary submit"  type="<?= $v->type?>"  task_guid="<?= $v->task_guid?>" question_guid="<?= $v->question_guid?>" code="<?= $v->code?>"> 立即提交 </button>
+					</p>
+					<?php }?>
 					 <?php }else{?>
 					 <p class="mui-content-padded center" >
 					  <?php if($k!=0){?>
@@ -225,14 +249,20 @@ use common\models\CommonUtil;
         				</ul>
         				<div class="action-container">
             				 <?php if($k==($count-1)){?>
-                				 <p class="mui-content-padded ">
+                				<?php if($answer->offline_save==0){?>
+				     <p class="mui-content-padded ">
 				      <button class="mui-btn mui-btn-primary pull-left preview"  type="<?= $v->type?>"  task_guid="<?= $v->task_guid?>" question_guid="<?= $v->question_guid?>" code="<?= $v->code?>"> 上一页 </button>
 				     </p>
 				     <p class="clear"></p>
-            					 <p class="mui-content-padded center" >
-            					 <button class="mui-btn mui-btn-warning  save" >离线保存</button>
-            					 <button class="mui-btn mui-btn-primary submit"  type="<?= $v->type?>"  task_guid="<?= $v->task_guid?>" question_guid="<?= $v->question_guid?>" code="<?= $v->code?>"> 立即提交 </button>
-            					</p>
+					 <p class="mui-content-padded center" >
+					 <button class="mui-btn mui-btn-warning  save" >离线保存</button>
+					 <button class="mui-btn mui-btn-primary submit"  type="<?= $v->type?>"  task_guid="<?= $v->task_guid?>" question_guid="<?= $v->question_guid?>" code="<?= $v->code?>"> 立即提交 </button>
+					</p>
+					<?php }else{?>
+					<p class="mui-content-padded center" >
+					 <button class="mui-btn mui-btn-primary submit"  type="<?= $v->type?>"  task_guid="<?= $v->task_guid?>" question_guid="<?= $v->question_guid?>" code="<?= $v->code?>"> 立即提交 </button>
+					</p>
+					<?php }?>
             					 <?php }else{?>
             					 <p class="mui-content-padded center" >
             					  <?php if($k!=0){?>
@@ -274,15 +304,20 @@ use common\models\CommonUtil;
         				</ul>
         				<div class="action-container">
 				 <?php if($k==($count-1)){?>
-				    <p class="mui-content-padded ">
+				    <?php if($answer->offline_save==0){?>
+				     <p class="mui-content-padded ">
 				      <button class="mui-btn mui-btn-primary pull-left preview"  type="<?= $v->type?>"  task_guid="<?= $v->task_guid?>" question_guid="<?= $v->question_guid?>" code="<?= $v->code?>"> 上一页 </button>
 				     </p>
 				     <p class="clear"></p>
 					 <p class="mui-content-padded center" >
-					 
 					 <button class="mui-btn mui-btn-warning  save" >离线保存</button>
 					 <button class="mui-btn mui-btn-primary submit"  type="<?= $v->type?>"  task_guid="<?= $v->task_guid?>" question_guid="<?= $v->question_guid?>" code="<?= $v->code?>"> 立即提交 </button>
 					</p>
+					<?php }else{?>
+					<p class="mui-content-padded center" >
+					 <button class="mui-btn mui-btn-primary submit"  type="<?= $v->type?>"  task_guid="<?= $v->task_guid?>" question_guid="<?= $v->question_guid?>" code="<?= $v->code?>"> 立即提交 </button>
+					</p>
+					<?php }?>
 					 <?php }else{?>
 					 <p class="mui-content-padded center" >
 					  <?php if($k!=0){?>
@@ -315,14 +350,20 @@ use common\models\CommonUtil;
         				</ul>
         				<div class="action-container">
         				 <?php if($k==($count-1)){?>
-        				 <p class="mui-content-padded ">
+        				 <?php if($answer->offline_save==0){?>
+				     <p class="mui-content-padded ">
 				      <button class="mui-btn mui-btn-primary pull-left preview"  type="<?= $v->type?>"  task_guid="<?= $v->task_guid?>" question_guid="<?= $v->question_guid?>" code="<?= $v->code?>"> 上一页 </button>
 				     </p>
 				     <p class="clear"></p>
-        					 <p class="mui-content-padded center" >
-        					 <button class="mui-btn mui-btn-warning  save" >离线保存</button>
-        					 <button class="mui-btn mui-btn-primary submit"  type="<?= $v->type?>"  task_guid="<?= $v->task_guid?>" question_guid="<?= $v->question_guid?>" code="<?= $v->code?>"> 立即提交 </button>
-        					</p>
+					 <p class="mui-content-padded center" >
+					 <button class="mui-btn mui-btn-warning  save" >离线保存</button>
+					 <button class="mui-btn mui-btn-primary submit"  type="<?= $v->type?>"  task_guid="<?= $v->task_guid?>" question_guid="<?= $v->question_guid?>" code="<?= $v->code?>"> 立即提交 </button>
+					</p>
+					<?php }else{?>
+					<p class="mui-content-padded center" >
+					 <button class="mui-btn mui-btn-primary submit"  type="<?= $v->type?>"  task_guid="<?= $v->task_guid?>" question_guid="<?= $v->question_guid?>" code="<?= $v->code?>"> 立即提交 </button>
+					</p>
+					<?php }?>
         					 <?php }else{?>
         					 <p class="mui-content-padded center" >
                 					  <?php if($k!=0){?>
@@ -354,14 +395,20 @@ use common\models\CommonUtil;
         				</ul>
         				<div class="action-container">
 				 <?php if($k==($count-1)){?>
-				 <p class="mui-content-padded ">
+				 <?php if($answer->offline_save==0){?>
+				     <p class="mui-content-padded ">
 				      <button class="mui-btn mui-btn-primary pull-left preview"  type="<?= $v->type?>"  task_guid="<?= $v->task_guid?>" question_guid="<?= $v->question_guid?>" code="<?= $v->code?>"> 上一页 </button>
 				     </p>
 				     <p class="clear"></p>
 					 <p class="mui-content-padded center" >
-					 <button class="mui-btn mui-btn-warning  save" >离线保存</button>
+					 <button class="mui-btn mui-btn-warning  save"  >离线保存</button>
 					 <button class="mui-btn mui-btn-primary submit"  type="<?= $v->type?>"  task_guid="<?= $v->task_guid?>" question_guid="<?= $v->question_guid?>" code="<?= $v->code?>"> 立即提交 </button>
 					</p>
+					<?php }else{?>
+					<p class="mui-content-padded center" >
+					 <button class="mui-btn mui-btn-primary submit"  type="<?= $v->type?>"  task_guid="<?= $v->task_guid?>" question_guid="<?= $v->question_guid?>" code="<?= $v->code?>"> 立即提交 </button>
+					</p>
+					<?php }?>
 					 <?php }else{?>
 					 <p class="mui-content-padded center" >
 					  <?php if($k!=0){?>

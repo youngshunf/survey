@@ -21,7 +21,6 @@ use common\models\CommonUtil;
 							<?php }?>
 							</p>
 							<p>
-								<span class="sub">截止 : <?= CommonUtil::fomatDate($v['task']['end_time'])?></span>
 								<span class="pull-right">
 								</span>
 							</p>
@@ -43,10 +42,12 @@ use common\models\CommonUtil;
     						 <span class="btn btn-warning del-answer"  answerid="<?= $v['answer']['id']?>">删除</span></span>
     						 <?php }?>
 						 <?php }elseif($v['answer']['status']==1){?>
-        					<?php if($v['task']['dist']*30<=$v['task']['do_radius']){?>
+        					<?php if($v['task']['dist']*30<=$v['task']['do_radius'] && $v['answer']['offline_save']==0){?>
         					<a class="btn  btn-warning pull-right do-task"  task_guid="<?= $v['task']['task_guid']?>"  answer_guid="<?= $v['answer']['answer_guid']?>"> 做任务</a>
-        				    <?php  }else {?>
-        				     <span class=" pull-right"> <span >不在执行范围</span>
+        				    <?php  }elseif($v['answer']['offline_save']==1){?>
+        					<a class="btn  btn-warning pull-right do-task"  task_guid="<?= $v['task']['task_guid']?>"  answer_guid="<?= $v['answer']['answer_guid']?>"> 提交答案</a>
+        				    <?php  }else{?>
+        				     <span class=" pull-right"> <span class="red">不在执行范围</span>
         				     <span class="btn btn-warning del-answer" answerid="<?= $v['answer']['id']?>">删除</span></span>
         				    <?php }?>
 				    <?php } }else {?>

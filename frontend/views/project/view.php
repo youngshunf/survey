@@ -44,6 +44,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'name',
             'tasknum',
+            'shop',
             ['attribute'=>'任务进度',
             'value'=>$doneRate.'%',
             ],

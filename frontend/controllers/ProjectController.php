@@ -526,7 +526,7 @@ class ProjectController extends Controller
                     $result="";
                     if(!empty($answerDetail)){
                         $optArr=explode(':', $answerDetail->answer);
-                        $result ='选项'.($optArr[0]+1) .'、'.$optArr[1];
+                        $result =$optArr[1];
                         if(!empty($answerDetail->open_answer)){
                             $result.=';'.$answerDetail->open_answer;
                         }
@@ -541,7 +541,7 @@ class ProjectController extends Controller
                         $optArrs=json_decode($answerDetail->answer,true);
                         foreach ($optArrs as $a){
                             $optArr=explode(':', $a);
-                            $result .= '选项'.($optArr[0]+1) .'、'.$optArr[1].";";
+                            $result .= $optArr[1].";";
                         }
                         $resultExcel->getActiveSheet()->setCellValue((string)$col.(string)$i,$result);
                     }
@@ -561,7 +561,14 @@ class ProjectController extends Controller
                         $resultExcel->getActiveSheet()->getCell((string)$col.(string)$i)->getHyperlink()->setUrl($url);
                         $resultExcel->getActiveSheet()->getStyle((string)$col.(string)$i)->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
                     }
-                    
+                }elseif ($v->type==4){
+                        $answerDetail=AnswerDetail::findOne(['answer_guid'=>$item['answer_guid'],'task_guid'=>$im->task_guid,'question_guid'=>$v['question_guid'],'user_guid'=>$item['user_guid']]);
+                    if(!empty($answerDetail)){
+                        $url=yii::getAlias('@photo').'/'.$answerDetail['path'].$answerDetail['photo'];
+                        $resultExcel->getActiveSheet()->setCellValue($col.$i,"录音");
+                        $resultExcel->getActiveSheet()->getCell($col.$i)->getHyperlink()->setUrl($url);
+                        $resultExcel->getActiveSheet()->getStyle($col.$i)->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
+                    }
                 }
                
             }
@@ -768,7 +775,7 @@ class ProjectController extends Controller
                         $result="";
                         if(!empty($answerDetail)){
                             $optArr=explode(':', $answerDetail->answer);
-                            $result ='选项'.($optArr[0]+1) .'、'.$optArr[1];
+                            $result =$optArr[1];
                             if(!empty($answerDetail->open_answer)){
                                 $result.=';'.$answerDetail->open_answer;
                             }
@@ -783,7 +790,7 @@ class ProjectController extends Controller
                             $optArrs=json_decode($answerDetail->answer,true);
                             foreach ($optArrs as $a){
                                 $optArr=explode(':', $a);
-                                $result .= '选项'.($optArr[0]+1) .'、'.$optArr[1].";";
+                                $result .= $optArr[1].";";
                             }
                             $resultExcel->getActiveSheet()->setCellValue((string)$col.(string)$i,$result);
                         }
@@ -804,7 +811,15 @@ class ProjectController extends Controller
                             $resultExcel->getActiveSheet()->getStyle((string)$col.(string)$i)->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
                         }
     
+                    }elseif ($v->type==4){
+                        $answerDetail=AnswerDetail::findOne(['answer_guid'=>$item['answer_guid'],'task_guid'=>$im->task_guid,'question_guid'=>$v['question_guid'],'user_guid'=>$item['user_guid']]);
+                    if(!empty($answerDetail)){
+                        $url=yii::getAlias('@photo').'/'.$answerDetail['path'].$answerDetail['photo'];
+                        $resultExcel->getActiveSheet()->setCellValue($col.$i,"录音");
+                        $resultExcel->getActiveSheet()->getCell($col.$i)->getHyperlink()->setUrl($url);
+                        $resultExcel->getActiveSheet()->getStyle($col.$i)->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
                     }
+                 }
                      
                 }
                 $i++;

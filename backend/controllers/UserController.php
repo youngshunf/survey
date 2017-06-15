@@ -12,6 +12,7 @@ use yii\filters\AccessControl;
 use yii\data\ActiveDataProvider;
 use common\models\Group;
 use common\models\GroupUser;
+use common\models\LoginRec;
 
 /**
  * UserController implements the CRUD actions for User model.
@@ -55,6 +56,22 @@ class UserController extends Controller
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
+    }
+    
+    public function actionUpdateUserAddress(){
+        $i=0;
+        foreach (User::find()->each(10) as $user){
+            if(empty($user->address)){
+                $loginRec=LoginRec::find()->andWhere(['user_guid'=>$user->user_guid,'address'=>null])->orderBy('time asc')->one();
+                if(!empty($loginRec) && !empty($loginRec->address)){
+                    $user->address=$loginRec->address;
+                    $user->save();
+                    $i++;
+                }
+            }
+        }
+        yii::$app->getSession()->setFlash('error','更新'.$i.'条数据!');
+        return  $this->redirect(yii::$app->request->referrer);
     }
 
     /**

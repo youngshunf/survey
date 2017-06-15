@@ -293,6 +293,10 @@ class UserController extends Controller
         $data=$_POST['data'];
         $amount=$data['amount'];
         $trans=yii::$app->db->beginTransaction();
+        $wallet=Wallet::findOne(['user_guid'=>$user->user_guid]);
+        if($amount>$wallet->non_payment){
+            return CommonUtil::success('提现金额不能大于余额');
+        }
         try{
             $withDrawRec=new WithdrawRec();
             $withDrawRec->user_guid=$user->user_guid;
@@ -300,7 +304,7 @@ class UserController extends Controller
             $withDrawRec->created_at=time();
 
             if(!$withDrawRec->save()) throw new Exception();
-                $wallet=Wallet::findOne(['user_guid'=>$user->user_guid]);
+                
                 $wallet->non_payment -= $amount;
                 $wallet->withdrawing += $amount;
             if(!$wallet->save()) throw new Exception();

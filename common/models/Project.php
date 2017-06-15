@@ -31,7 +31,7 @@ class Project extends \yii\db\ActiveRecord
         return [
             [['user_guid'], 'string'],
             [['tasknum', 'created_at'], 'integer'],
-            [['name'], 'string', 'max' => 255]
+            [['name','shop'], 'string', 'max' => 255]
         ];
     }
 
@@ -44,6 +44,7 @@ class Project extends \yii\db\ActiveRecord
             'id' => 'ID',
             'user_guid' => 'User Guid',
             'name' => '项目名称',
+            'shop'=>'门店渠道',
             'tasknum' => '任务个数',
             'created_at' => '创建时间',
         ];

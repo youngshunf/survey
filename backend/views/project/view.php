@@ -44,6 +44,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'name',
             'tasknum',
+            'shop',
             ['attribute'=>'任务进度',
             'value'=>$doneRate.'%',
             ],
@@ -388,6 +389,7 @@ $this->params['breadcrumbs'][] = $this->title;
             }
             ],
              'province',
+             'city',
                ['attribute'=>'status',
             'filter'=>['0'=>'任务设计中','1'=>'待审核', '2'=>'审核通过','3'=>'已下线','99'=>'审核未通过'],
             'options'=>['width'=>'120px'],

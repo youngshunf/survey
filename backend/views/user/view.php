@@ -30,6 +30,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'attributes' => [
                             'name',
                             'mobile',
+                            'alipay',
                 			['attribute'=>'created_at','value'=>empty($model->created_at)?"":CommonUtil::fomatHours($model->created_at)],
                     		['attribute'=>'updated_at','value'=>empty($model->updated_at)?"":CommonUtil::fomatHours($model->updated_at)],
                         ],

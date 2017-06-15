@@ -32,8 +32,9 @@ $this->params['breadcrumbs'][] = $this->title;
             'name',
             'nick',
             'mobile',
+            'alipay',
             'email',
-            
+            'address',
             ['attribute'=>'created_at',
             'format'=>['date','php: Y-m-d H:i:s'],
             ],

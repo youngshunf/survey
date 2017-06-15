@@ -39,6 +39,7 @@ class ProjectForm extends Model
 {
     public $type;
     public $name;
+    public $shop;
     public $desc;
      public $province;
      public $city;
@@ -72,7 +73,7 @@ class ProjectForm extends Model
             [[ 'number', 'radius', 'status', 'group_id','do_radius','do_type','answer_radius','answer_type','max_times','type','is_show_price'], 'integer'], 
             [['price', 'total_price','group_id'], 'number'],
             [['end_time'],'safe'],
-            [['name','province', 'city', 'district', 'address'], 'string', 'max' => 255],
+            [['name','shop', 'province', 'city', 'district', 'address'], 'string', 'max' => 255],
             
         ];
     }
@@ -86,6 +87,7 @@ class ProjectForm extends Model
             'id' => 'ID',
             'task_guid' => 'Task Guid',
             'name' => '项目名称',
+            'shop'=>'门店渠道',
             'desc' => '描述',
             'type' => '类型一',
             'do_type' => '类型二',
@@ -119,6 +121,7 @@ class ProjectForm extends Model
         $project=new Project();
         $project->user_guid=$user_guid;
         $project->name=$this->name;
+        $project->shop=$this->shop;
         $project->created_at=time();
         if($project->save()){
             $project_id=$project->id;

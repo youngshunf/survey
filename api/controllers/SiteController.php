@@ -107,7 +107,7 @@ class SiteController extends Controller
      * @author youngshunf
      * @return string
      */
-    public function actionSendVerifyCode2(){
+    public function actionSendPwdCode(){
         if(!isset($_POST['data'])){
             return CommonUtil::error('e1001');
         }
@@ -228,12 +228,12 @@ class SiteController extends Controller
         $user->last_ip=yii::$app->request->getUserIP();
         $user->last_login_time=time();
         $user->last_login_client=yii::$app->request->getUserAgent();
+        $user->address=@$_POST['data']['locInfo']['address'];
         $user->created_at=time();
         if($user->save()){
             //验证码使用后失效
             $mobileVerify->is_valid=0;
             $mobileVerify->save();
-            
             //自动登录
             $loginRec=new LoginRec();
             $loginRec->user_guid=$user->user_guid;
@@ -333,7 +333,7 @@ class SiteController extends Controller
 //        }
        $wgtUrl= 'http://images.suoxinmr.com/wgt/H55174E5A.wgt';
       $updateInfo=[
-          'newVer'=>'1.3.4',
+          'newVer'=>'1.3.5',
           'wgtUrl'=>$wgtUrl
       ];
       

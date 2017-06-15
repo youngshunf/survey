@@ -12,10 +12,11 @@ use common\models\CommonUtil;
 						<div class="col-xs-12">
 						<p ><b><?= $taskArr['name']?></b></p>	
 						</div>
-				
+				<!--  
 						<div class="col-xs-8">
 							<p class="sub">截止:<?= CommonUtil::fomatDate($taskArr['end_time'])?></p>
 						</div>
+				-->
 						<div class="col-xs-4">
 						 <?php if($taskArr['is_show_price']==1){?>
 							<p ><span class="sub">奖励: </span><span class="orange">￥<?= $taskArr['price']?></span></p>

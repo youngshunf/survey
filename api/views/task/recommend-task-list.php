@@ -18,11 +18,13 @@ use common\models\CommonUtil;
 								<span class="mui-pull-right"> <span class="orange">￥ <?= $v['price']?> / 单</span></span>
 							<?php }?>
 							</p>
+							<!--  
 							<p>
 								<span class="sub">截止 : <?= CommonUtil::fomatDate($v['end_time'])?></span>
 								<span class="pull-right">
 								</span>
 							</p>
+							-->
 							<p >
 								<span style="font-size: 12px;">地址:<?= $v['address']?> (<?= sprintf("%.2f",($v['dist']*30)/1000).'km'?>)</span>
 							</p>

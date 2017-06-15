@@ -19,6 +19,7 @@ $this->registerJsFile('@web/js/PCASClass.js', ['position'=> View::POS_HEAD]);
     <?php $form = ActiveForm::begin(['id'=>'task-form','options' => ['enctype' => 'multipart/form-data','onsubmit'=>'return check()']]); ?>
     <div class="col-md-12">
     <?= $form->field($model, 'name')->textInput(['maxlength' => 255]) ?>
+    <?= $form->field($model, 'shop')->textInput(['maxlength' => 255]) ?>
     </div>
  
     <div class="col-md-6">
@@ -35,10 +36,10 @@ $this->registerJsFile('@web/js/PCASClass.js', ['position'=> View::POS_HEAD]);
     </div>
 
     <div class="col-md-6">
-    <?= $form->field($model, 'do_type')->dropDownList(['1'=>'宅在家','2'=>'四处跑']) ?>
+    <?= $form->field($model, 'do_type')->dropDownList(['2'=>'四处跑','1'=>'宅在家']) ?>
     <?= $form->field($model, 'max_times')->textInput(['maxlength'=>8]) ?>
      <?= $form->field($model, 'number')->textInput(['maxlength' => 5]) ?>
-          <?= $form->field($model, 'is_show_price')->dropDownList(['1'=>'是','0'=>'否'])?>
+          <?= $form->field($model, 'is_show_price')->dropDownList(['0'=>'否','1'=>'是'])?>
     <?php  //$form->field($model, 'province')->textInput(['maxlength'=>32])?>
 
     <?php //$form->field($model, 'city')->textInput(['maxlength'=>32])?>

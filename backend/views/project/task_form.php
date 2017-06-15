@@ -31,11 +31,11 @@ $this->registerJsFile('@web/js/PCASClass.js', ['position'=> View::POS_HEAD]);
     </div>
 
     <div class="col-md-6">
-    <?= $form->field($model, 'do_type')->dropDownList(['1'=>'宅在家','2'=>'四处跑']) ?>
+    <?= $form->field($model, 'do_type')->dropDownList(['2'=>'四处跑','1'=>'宅在家']) ?>
     <?= $form->field($model, 'max_times')->textInput(['maxlength'=>8]) ?>
     <?= $form->field($model, 'price')->textInput(['maxlength' => 5]) ?>
           <?= $form->field($model, 'number')->textInput(['maxlength' => 5]) ?>
-          <?= $form->field($model, 'is_show_price')->dropDownList(['1'=>'是','0'=>'否'])?>
+          <?= $form->field($model, 'is_show_price')->dropDownList(['0'=>'否','1'=>'是'])?>
      <?= $form->field($model, 'end_time')->widget(DateTimePicker::className(),[
         'options' => ['placeholder' => '请选择任务结束时间'],
         'pluginOptions' => [

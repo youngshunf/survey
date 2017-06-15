@@ -29,6 +29,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn','header'=>'序号'],
             'name',
+            'shop',
             'tasknum',
             ['attribute'=>'created_at',
             'format'=>['date','php:Y-m-d H:i:s']

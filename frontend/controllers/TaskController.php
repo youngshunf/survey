@@ -1118,7 +1118,7 @@ class TaskController extends Controller
                     $result="";
                     if(!empty($answerDetail)){
                         $optArr=explode(':', $answerDetail->answer);
-                        $result ='选项'.($optArr[0]+1) .'、'.$optArr[1];
+                        $result =$optArr[1];
                         if(!empty($answerDetail->open_answer)){
                             $result.=';'.$answerDetail->open_answer;
                         }
@@ -1132,7 +1132,7 @@ class TaskController extends Controller
                         $optArrs=json_decode($answerDetail->answer,true);
                         foreach ($optArrs as $a){
                             $optArr=explode(':', $a);
-                            $result .= '选项'.($optArr[0]+1) .'、'.$optArr[1].";";
+                            $result .= $optArr[1].";";
                         }
                         $resultExcel->getActiveSheet()->setCellValue($col.$i,$result);
                     }

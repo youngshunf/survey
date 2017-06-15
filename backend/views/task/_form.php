@@ -32,11 +32,11 @@ $this->registerJsFile('@web/js/PCASClass.js', ['position'=> View::POS_HEAD]);
           <?= $form->field($model, 'group_id')->dropDownList(ArrayHelper::map($group, 'group_id', 'group_name'),['prompt'=>'所有人']) ?>
            <?= $form->field($model, 'price')->textInput(['maxlength' => 5]) ?>
           <?= $form->field($model, 'number')->textInput(['maxlength' => 5]) ?>
-          <?= $form->field($model, 'is_show_price')->dropDownList(['1'=>'是','0'=>'否'])?>
+          <?= $form->field($model, 'is_show_price')->dropDownList(['0'=>'否','1'=>'是'])?>
     </div>
 
     <div class="col-md-6">
-    <?= $form->field($model, 'do_type')->dropDownList(['1'=>'宅在家','2'=>'四处跑']) ?>
+    <?= $form->field($model, 'do_type')->dropDownList(['2'=>'四处跑','1'=>'宅在家']) ?>
     <?= $form->field($model, 'max_times')->textInput(['maxlength'=>8]) ?>
     <?= $form->field($model, 'province')->textInput(['maxlength'=>32])?>
 

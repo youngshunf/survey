@@ -102,6 +102,9 @@ class TaskController extends Controller
             case 8://四处跑
                    $where=" and do_type=2 ";
                         break;
+            case 9://推荐任务
+                $where=" and is_recommend=1 ";
+                break;
         }
         
         $groupUser=GroupUser::findAll(['user_guid'=>$user->user_guid]);
@@ -353,7 +356,6 @@ class TaskController extends Controller
                 'task'=>  yii::$app->db->createCommand($cmdStr)->queryOne(),
                 'answer'=>$v
             ];
-          
         }
     
         return $this->renderAjax('my-task',[
@@ -582,6 +584,28 @@ class TaskController extends Controller
         
     }
     
+    //离线保存答案
+    public function  actionOfflineSaveAnswer(){
+        $clientUser=$_POST['user'];
+        //验证用户
+        $user=User::find()->andWhere(['user_guid'=>$clientUser['user_guid'],'access_token'=>$clientUser['access_token']])->one();
+         
+        if(empty($user)){
+            return CommonUtil::error('e1006');
+        }
+        $locInfo=$_POST['locInfo'];
+        $answer_guid=$_POST['answer_guid'];
+        $answer=Answer::findOne(['answer_guid'=>$answer_guid]);
+        $answer->offline_save=1;
+        $answer->save_lng=@$locInfo['lng'];
+        $answer->save_lat=@$locInfo['lat'];
+        $answer->save_address=@$locInfo['address'];
+        $answer->save_time=time();
+        if($answer->save()){
+            return CommonUtil::success('success');
+        }
+        return CommonUtil::error('e1002');
+    }
     /**
      * 接收音频文件
      */

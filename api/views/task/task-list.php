@@ -5,7 +5,11 @@ use common\models\CommonUtil;
  
  <?php foreach ($taskList as $k=> $v){?>
  	<ul class="mui-table-view">
-				<li class="mui-media task-list"  task_guid=<?= $v['task_guid']?>>
+ 	<?php if($k==0){?>
+ 	<li class="mui-media task-list" id="topOne"  task_guid=<?= $v['task_guid']?>>
+ 	<?php }else{?>
+				<li class="mui-media task-list"   task_guid=<?= $v['task_guid']?>>
+				<?php }?>
 						<?php if(!empty($v['photo'])){?>
 						<img class="mui-media-object mui-pull-left" src="<?= yii::getAlias('@photo').'/'.$v['path'].'thumb/'.$v['photo']?>" />
 						<?php }?>
@@ -17,11 +21,13 @@ use common\models\CommonUtil;
 								<span class="mui-pull-right"> <span class="orange">￥ <?= $v['price']?> / 单</span></span>
 								<?php }?>
 							</p>
+							<!--  
 							<p>
 								<span class="sub">截止 : <?= CommonUtil::fomatDate($v['end_time'])?></span>
 								<span class="pull-right">
 								</span>
 							</p>
+							-->
 							<p >
 								<span style="font-size: 12px;">地址:<?= $v['address']?> （<?= sprintf("%.2f",($v['dist']*30)/1000).'km'?>）</span>
 							</p>
