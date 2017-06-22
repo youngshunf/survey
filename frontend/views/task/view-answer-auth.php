@@ -27,7 +27,7 @@ p{
                   </div><!-- /.box-tools -->
                 </div><!-- /.box-header -->
                 <div class="box-body">
-                <?php if($role_id==87){?>
+                <?php if($role_id==89 || $role_id==88 || $role_id==87){?>
                 <button class="btn btn-success" id="first-auth">一审</button>
                  <button class="btn btn-info" id="sec-auth">二审</button>
                 <?php }?>

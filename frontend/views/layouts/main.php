@@ -73,7 +73,7 @@ $this->registerJsFile('@web/js/common.js');
                     </p>
                   </li>
                   <!-- Menu Body -->
-                  <?php if(yii::$app->user->identity->role_id==99){?>
+                  <?php if(yii::$app->user->identity->role_id==89){?>
                   <li class="user-body">
                     <div class="col-xs-4 text-center">
                       <a href="<?= Url::to(['user/index'])?>">用户</a>
@@ -145,9 +145,10 @@ $this->registerJsFile('@web/js/common.js');
               </a>
               <ul class="treeview-menu">
                 <li class=" <?php if(yii::$app->controller->id=='task'&&yii::$app->controller->action->id=='sp-task') echo "active";?>" ><a href="<?= Url::to(['task/sp-task'])?>"><i class="fa fa-circle-o"></i> 任务管理</a></li>
-               
+               <?php if(yii::$app->user->identity->role_id==89){?>
                 <li  class="<?php if(yii::$app->controller->id=='template'&&yii::$app->controller->action->id=='index') echo "active";?>" ><a href="<?= Url::to(['template/index'])?>"><i class="fa fa-circle-o"></i> 问卷模板</a></li>
                <li  class="<?php if(yii::$app->controller->id=='template'&&yii::$app->controller->action->id=='task') echo "active";?>" ><a href="<?= Url::to(['template/task'])?>"><i class="fa fa-circle-o"></i> 任务模板</a></li>
+               <?php }?>
                 <li  class="<?php if(yii::$app->controller->id=='project') echo "active";?>" ><a href="<?= Url::to(['project/index'])?>"><i class="fa fa-circle-o"></i>项目管理</a></li>
                
               </ul>

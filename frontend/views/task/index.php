@@ -26,9 +26,11 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
 </div>
     <div class="box-body">
+      <?php if(yii::$app->user->identity->role_id==89 ||yii::$app->user->identity->role_id==88){?>
   <p class="pull-right">
         <?= Html::a('发布任务', ['create'], ['class' => 'btn btn-warning']) ?>
        </p>   
+       <?php }?>
     <?php  echo $this->render('_search', ['model' => $searchModel]); ?>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -55,6 +57,7 @@ $this->params['breadcrumbs'][] = $this->title;
             }
             ],
              'province',
+             'city',
                ['attribute'=>'status',
             'filter'=>['0'=>'任务设计中','1'=>'待审核', '2'=>'审核通过','3'=>'已下线','99'=>'审核未通过'],
             'options'=>['width'=>'120px'],
@@ -98,14 +101,16 @@ $this->params['breadcrumbs'][] = $this->title;
                 return Html::a('查看 | ',$url,['title'=>'查看']);   
             },
                 'update'=>function ($url,$model,$key){
+                if(yii::$app->user->identity->role_id==89 ||yii::$app->user->identity->role_id==88){
                if($model->user_guid==yii::$app->user->identity->user_guid &&$model->status==0){
                     return Html::a('继续设计 | ',$url,['title'=>'继续设计']);
                 }else{
                     return Html::a('修改 | ',$url,['title'=>'修改']);
                 }
+                }
                     },
                 'delete'=>function ($url,$model,$key){
-                   if(yii::$app->user->identity->role_id==89)
+                   if(yii::$app->user->identity->role_id==89 ||yii::$app->user->identity->role_id==88)
                      return Html::a('删除 | ',$url,['title'=>'删除','data'=>['confirm'=>'您确定要删除此任务吗?','method'=>'post']]);
                 },
             
@@ -113,7 +118,7 @@ $this->params['breadcrumbs'][] = $this->title;
                      return Html::a('任务结果 | ',$url,['title'=>'任务结果']);
                     },
                 'off-line'=>function ($url,$model,$key){
-                 if($model->status==2)
+                 if($model->status==2 && yii::$app->user->identity->role_id==89 ||yii::$app->user->identity->role_id==88)
                     return Html::a('下线',$url,['title'=>'下线任务']);
                     },
                     'on-line'=>function ($url,$model,$key){

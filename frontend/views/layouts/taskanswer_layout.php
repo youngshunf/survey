@@ -24,10 +24,12 @@ use yii\helpers\Url;
                 'items' => $menuItems,
             ]);      
 		?>
+		  <?php if(yii::$app->user->identity->role_id==89 ||yii::$app->user->identity->role_id==88){?>
 		 <div class="top-right">
 		 <a class="btn btn-success " href="<?= Url::to(['export-answer','id'=>$id,'status'=>$status])?>">结果导出</a>
 		
 		 </div>
+		 <?php }?>
 		</div>
 		
         </div>

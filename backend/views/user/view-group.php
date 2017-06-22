@@ -58,6 +58,13 @@ $this->params['breadcrumbs'][] = $this->title;
               </div>
             </div>
             <div class="box-body">
+            <form action="<?= Url::to(['user/view-group'])?>" method="get">
+           <div class="input-group" style="width:100%;padding:15px">
+                <input type="hidden" name="id" value="<?= $id?>">
+                  <input type="text" class="form-control" name="name" placeholder="输入手机号搜索" style="width: 90%">
+                  <button type="submit" class="btn btn-primary" class="input-group-addon">搜索</button>
+                </div>
+            </form>
              <?php $form=ActiveForm::begin([
                     'action'=>'add-group-user',
                    'options'=>['onsubmit'=>'return check()']

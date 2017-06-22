@@ -24,7 +24,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class="box-body">
 
     <p>
-    <?php if(yii::$app->user->identity->role_id==89){?>
+     <?php if(yii::$app->user->identity->role_id==89 ||yii::$app->user->identity->role_id==88){?>
         <?= Html::a('修改', ['update', 'id' => $model->id], ['class' => 'btn btn-warning']) ?>
         <?= Html::a('删除', ['delete', 'id' => $model->id], [
             'class' => 'btn btn-warning',
@@ -39,9 +39,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 'confirm' => '您确定要发布此任务吗?',
             ],]) ?>
         <?php }?>
-     <?php }?>
      <a class="btn btn-warning  template" id="task-template">设置为任务模板</a>
        <a class="btn btn-warning" href="<?= Url::to(['copy-task','id'=>$model->id])?>" >复制任务</a>
+        <?php }?>
         <a class="btn btn-warning" href="javascript:;" onclick="history.go(-1)">返回</a>
     </p>
     <div class="row">
@@ -134,9 +134,11 @@ $this->params['breadcrumbs'][] = $this->title;
                   </div><!-- /.box-tools -->
                 </div><!-- /.box-header -->
                 <div class="box-body">
+                  <?php if(yii::$app->user->identity->role_id==89 ||yii::$app->user->identity->role_id==88){?>
           <a class="btn btn-warning  option" id="option">添加问题</a>
            <a class="btn btn-warning  template" id="template">设置为问卷模板</a>
            <a class="btn btn-warning"  href="<?= Url::to(['choose-template','id'=>$model->id,'project_id'=>@$project_id])?>">从模板库中选择</a>
+           <?php }?>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'columns' => [
@@ -196,20 +198,22 @@ $this->params['breadcrumbs'][] = $this->title;
             'template'=>'{move-up}{move-down}{update-question}{delete-question}',
             'buttons'=>[  
                 'move-up'=>function ($url,$model,$key){
-                if($model->code!=1){
+                if($model->code!=1 && (yii::$app->user->identity->role_id==89 ||yii::$app->user->identity->role_id==88)){
                     return Html::a('上移 | ',$url,['title'=>'上移']);
                 }
                 },
                 'move-down'=>function ($url,$model,$key){
                 $countquestion=Question::find()->andWhere(['task_guid'=>$model->task_guid])->count();
-                if($model->code!=$countquestion){
+                if($model->code!=$countquestion && (yii::$app->user->identity->role_id==89 ||yii::$app->user->identity->role_id==88)){
                     return Html::a('下移 | ',$url,['title'=>'下移']);
                 }
                 },
                 'update-question'=>function ($url,$model,$key){
+                if(yii::$app->user->identity->role_id==89 ||yii::$app->user->identity->role_id==88)
                 return Html::a('修改 | ',$url,['title'=>'修改']);
                 },
                 'delete-question'=>function ($url,$model,$key){
+                if(yii::$app->user->identity->role_id==89 ||yii::$app->user->identity->role_id==88)
                 return Html::a('删除',$url,['title'=>'删除','data-confirm'=>'您确定要删除这个问题?']);
                 },
             

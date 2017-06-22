@@ -112,19 +112,30 @@ class UserController extends Controller
     }
     
     public function actionViewGroup($id){
-        $dataProvider=new ActiveDataProvider([
-            'query'=>GroupUser::find()->andWhere(['group_id'=>$id])->orderBy('created_at desc'),
-        ]);
+            $dataProvider=new ActiveDataProvider([
+                'query'=>GroupUser::find()->andWhere(['group_id'=>$id])->orderBy('created_at desc'),
+            ]);
         $group=Group::findOne($id);
+        if(isset($_GET['name'])){
+            $name=$_GET['name'];
         $userData=new ActiveDataProvider([
-            'query'=>User::find()->orderBy('created_at desc'),
+            'query'=>User::find()->andFilterWhere(['like', 'mobile', $name])->orderBy('created_at desc'),
             'pagination'=>[
                 'pagesize'=>30
             ]
         ]);
+        }else{
+            $userData=new ActiveDataProvider([
+                'query'=>User::find()->orderBy('created_at desc'),
+                'pagination'=>[
+                    'pagesize'=>30
+                ]
+            ]);
+        }
         return $this->render('view-group',[
             'dataProvider'=>$dataProvider,
             'group'=>$group,
+            'id'=>$id,
             'userData'=>$userData
         ]);
     }
