@@ -11,8 +11,8 @@ use yii\widgets\ActiveForm;
 <div class="admin-user-form">
 
     <?php $form = ActiveForm::begin(); ?>
-    <?php if($model->isNewRecord){?>
     <?= $form->field($model, 'username')->textInput(['maxlength' => 20]) ?>
+    <?php if($model->isNewRecord){?>
     <?= $form->field($model, 'role_id')->dropDownList(['98'=>'平台系统管理员','97'=>'平台质检员','96'=>'平台观察员']) ?>
     <?php }?>
     <?= $form->field($model, 'name')->textInput(['maxlength' => 20]) ?>

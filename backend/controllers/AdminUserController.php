@@ -57,7 +57,7 @@ public function behaviors()
     public function actionSpUser()
     {
         $searchModel = new SearchAdminUser();
-        $searchModel->role=['89','88','87'];
+        $searchModel->role=['89','88','87','86'];
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
     
         return $this->render('sp-user', [
@@ -143,8 +143,8 @@ public function behaviors()
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
-
-        return $this->redirect(['index']);
+        yii::$app->getSession()->setFlash('success','删除成功!');
+        return $this->redirect(['sp-user']);
     }
 
     /**

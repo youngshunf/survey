@@ -33,12 +33,13 @@ p{
                 <?php if($role_id==89||$role_id==88){?>
                 <button class="btn btn-success" id="first-auth">一审</button>
                   <button class="btn btn-info" id="sec-auth">二审</button>
+                   <a class="btn btn-warning" href="<?= Url::to(['view-answer-auth','id'=>$model->id])?>">查看审核结果</a>
                 <?php }elseif ( $role_id==87){?>
                    <button class="btn btn-success" id="first-auth">一审</button>
                    <button class="btn btn-info" id="sec-auth">二审</button>
+                    <a class="btn btn-warning" href="<?= Url::to(['view-answer-auth','id'=>$model->id])?>">查看审核结果</a>
                 <?php }?>
-                     
-                <a class="btn btn-warning" href="<?= Url::to(['view-answer-auth','id'=>$model->id])?>">查看审核结果</a>
+               
         <a class="btn btn-success" href="javascript:;" onclick="history.go(-1)">返回</a>
         <?php foreach ($question as $k=>$v){?>    
         <ul class="mui-table-view" >

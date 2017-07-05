@@ -72,21 +72,7 @@ $this->registerJsFile('@web/js/common.js');
                       <small><?= date("Y-m-d")?></small>
                     </p>
                   </li>
-                  <!-- Menu Body -->
-                  <?php if(yii::$app->user->identity->role_id==89){?>
-                  <li class="user-body">
-                    <div class="col-xs-4 text-center">
-                      <a href="<?= Url::to(['user/index'])?>">用户</a>
-                    </div>
-                    <div class="col-xs-4 text-center">
-                      <a href="<?= Url::to(['task/index'])?>">任务</a>
-                    </div>
-                    <div class="col-xs-4 text-center">
-                      <a href="<?= Url::to(['finance/index'])?>">财务</a>
-                    </div>
-                  </li>
-                  <?php }?>
-                  <!-- Menu Footer-->
+                
                   <li class="user-footer">
                     <div class="pull-left">
                       <a href="#" class="btn btn-default btn-flat"></a>
