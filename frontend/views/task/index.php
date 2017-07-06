@@ -31,8 +31,11 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= Html::a('发布任务', ['create'], ['class' => 'btn btn-warning']) ?>
        </p>   
        <?php }?>
+
     <?php  echo $this->render('_search', ['model' => $searchModel]); ?>
     <?php if(yii::$app->user->identity->role_id==89 ||yii::$app->user->identity->role_id==88){?>
+
+    
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
@@ -83,10 +86,10 @@ $this->params['breadcrumbs'][] = $this->title;
             'options'=>['width'=>'250px'],
             'template'=>'{view}{update}{delete}{view-answer}{off-line}{on-line}',
             'buttons'=>[
-
                 'view'=>function ($url,$model,$key){
+                if(yii::$app->user->identity->role_id==89 ||yii::$app->user->identity->role_id==88)
                 return Html::a('查看 | ',$url,['title'=>'查看']);   
-            },
+               },
                 'update'=>function ($url,$model,$key){
                 if(yii::$app->user->identity->role_id==89 ||yii::$app->user->identity->role_id==88){
                if($model->user_guid==yii::$app->user->identity->user_guid &&$model->status==0){
@@ -102,6 +105,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 },
             
                 'view-answer'=>function ($url,$model,$key){
+                if(yii::$app->user->identity->role_id==89 ||yii::$app->user->identity->role_id==88)
                      return Html::a('任务结果 | ',$url,['title'=>'任务结果']);
                     },
                 'off-line'=>function ($url,$model,$key){
@@ -117,9 +121,8 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
         'tableOptions'=>['class'=>'table table-striped table-responsive'],
     ]); ?>
-
-    <?php }else{?>
-    <?= GridView::widget([
+<?php }else{?>
+<?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'pager'=>[
@@ -168,8 +171,8 @@ $this->params['breadcrumbs'][] = $this->title;
             'options'=>['width'=>'250px'],
             'template'=>'{view}{update}{delete}{view-answer}{off-line}{on-line}',
             'buttons'=>[
-
                 'view'=>function ($url,$model,$key){
+                if(yii::$app->user->identity->role_id==89 ||yii::$app->user->identity->role_id==88)
                 return Html::a('查看 | ',$url,['title'=>'查看']);   
             },
                 'update'=>function ($url,$model,$key){
@@ -187,6 +190,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 },
             
                 'view-answer'=>function ($url,$model,$key){
+                if(yii::$app->user->identity->role_id==89 ||yii::$app->user->identity->role_id==88)
                      return Html::a('任务结果 | ',$url,['title'=>'任务结果']);
                     },
                 'off-line'=>function ($url,$model,$key){
@@ -202,8 +206,10 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
         'tableOptions'=>['class'=>'table table-striped table-responsive'],
     ]); ?>
-    
+
+   
     <?php }?>
+
 </div>
 </div>
 
