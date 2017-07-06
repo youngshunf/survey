@@ -38,7 +38,28 @@ $this->params['breadcrumbs'][] = $this->title;
             ['attribute'=>'created_at',
             'format'=>['date','php: Y-m-d H:i:s'],
             ],
-            ['class' => 'yii\grid\ActionColumn','header'=>'操作'],
+             ['class' => 'yii\grid\ActionColumn',
+            'header'=>'操作',
+            'options'=>['width'=>'250px'],
+            'template'=>'{view}{update}{delete}{view-task}',
+            'buttons'=>[
+              'view'=>function ($url,$model,$key){
+                     return Html::a('查看 | ',$url,['title'=>'查看']);
+                 
+                 },
+            'update'=>function ($url,$model,$key){
+               
+                  return Html::a('修改 | ',$url,['title'=>'修改']);
+            },
+            'delete'=>function ($url,$model,$key){
+             
+               return Html::a('删除 | ',$url,['title'=>'删除']);
+            },
+             'view-task'=>function ($url,$model,$key){
+                return Html::a('查看任务  ',$url,['title'=>'查看']);   
+            },           
+                ]
+            ],
         ],
     ]); ?>
     </div>

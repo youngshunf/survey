@@ -13,6 +13,7 @@ use yii\data\ActiveDataProvider;
 use common\models\Group;
 use common\models\GroupUser;
 use common\models\LoginRec;
+use common\models\Answer;
 
 /**
  * UserController implements the CRUD actions for User model.
@@ -83,6 +84,18 @@ class UserController extends Controller
     {
         return $this->render('view', [
             'model' => $this->findModel($id),
+        ]);
+    }
+    
+    public function actionViewTask($id)
+    {
+        $model=$this->findModel($id);
+        $dataProvider=new ActiveDataProvider([
+            'query'=> Answer::find()->andWhere(['user_guid'=>$model->user_guid])->orderBy('created_at desc'),
+        ]);
+        return $this->render('view-task', [
+            'dataProvider' => $dataProvider,
+            'model'=>$model
         ]);
     }
     
