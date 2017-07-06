@@ -46,6 +46,7 @@ $this->params['breadcrumbs'][] = $this->title;
     </p>
     <div class="row">
     <div class="col-md-6">
+    <?php if(yii::$app->user->identity->role_id==89 ||yii::$app->user->identity->role_id==88){?>
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
@@ -79,6 +80,38 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ],
     ]) ?>
+    <?php }else{?>
+     <?= DetailView::widget([
+        'model' => $model,
+        'attributes' => [
+            'name',
+            ['attribute'=>'发布者',
+            'value'=>$model->user->username
+            ],
+            ['attribute'=>'post_type',
+            'value'=>CommonUtil::getDescByValue('task', 'post_type', $model->post_type)
+            ],
+            ['attribute'=>'answer_type',
+            'value'=>CommonUtil::getDescByValue('task', 'answer_type', $model->answer_type)
+            ],
+             ['attribute'=>'type',          
+               'value'=>CommonUtil::getDescByValue('task', 'type', $model->type)
+            ],
+            ['attribute'=>'do_type',
+            'value'=>CommonUtil::getDescByValue('task', 'do_type', $model->do_type)
+            ],
+            'radius',
+            'do_radius',
+            'answer_radius',
+            'number',
+            ['attribute'=>'end_time',
+            'label'=>'任务截止时间',
+            'format'=>['date','php:Y-m-d H:i:s']
+            ],
+        ],
+    ]) ?>
+    
+    <?php }?>
         </div>
          <div class="col-md-6">
     <?= DetailView::widget([

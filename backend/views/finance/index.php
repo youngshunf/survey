@@ -76,6 +76,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'user.name',
             'user.mobile',
             'user.alipay',
+            'user.address',
             'amount',
             ['attribute'=>'status',
             'value'=>function ($model){

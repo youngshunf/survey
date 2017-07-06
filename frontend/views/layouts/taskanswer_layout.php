@@ -14,11 +14,15 @@ use yii\helpers\Url;
              $status=$_GET['status'];
          }
          $id=$_GET['id'];
+         if(yii::$app->user->identity->role_id==86){
+             $menuItems[] = ['label' => '合格', 'url' => ['/task/view-answer','id'=>$id,'status'=>'3'], 'active'=>$status==3  ];
+         }else{
           $menuItems[] = ['label' => '全部', 'url' => ['/task/view-answer','id'=>$id],'active'=>$status==0  ];    
           $menuItems[] = ['label' => '待提交', 'url' => ['/task/view-answer','id'=>$id, 'status'=>'1'], 'active'=>$status==1  ];
           $menuItems[] = ['label' => '待审核', 'url' => ['/task/view-answer','id'=>$id,'status'=>'2'], 'active'=>$status==2  ];
           $menuItems[] = ['label' => '合格', 'url' => ['/task/view-answer','id'=>$id,'status'=>'3'], 'active'=>$status==3  ];
           $menuItems[] = ['label' => '不合格', 'url' => ['/task/view-answer','id'=>$id,'status'=>'99'], 'active'=>$status==99  ];
+         }
             echo Nav::widget([
                 'options' => ['class' => 'nav nav-pills '],
                 'items' => $menuItems,
