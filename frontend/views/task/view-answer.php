@@ -65,6 +65,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 return Html::a('查看结果详情 | ',$url);
                 },
                 'view-answer-auth'=>function ($url,$model,$key){
+                if(yii::$app->user->identity->role_id==89 ||yii::$app->user->identity->role_id==88)
                 return Html::a('查看审核结果',$url);
                 },
             

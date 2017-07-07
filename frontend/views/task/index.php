@@ -189,7 +189,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 },
             
                 'view-answer'=>function ($url,$model,$key){
-                if(yii::$app->user->identity->role_id==89 ||yii::$app->user->identity->role_id==88)
                      return Html::a('任务结果 | ',$url,['title'=>'任务结果']);
                     },
                 'off-line'=>function ($url,$model,$key){
