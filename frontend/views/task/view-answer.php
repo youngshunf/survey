@@ -112,7 +112,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\ActionColumn',
             'header'=>'操作',
             'options'=>['width'=>'150px'],
-            'template'=>'{view-answer-detail}{view-answer-auth}',
+            'template'=>'{view-answer-detail}',
             'buttons'=>[  
                 'view-answer-detail'=>function ($url,$model,$key){
                 return Html::a('查看结果详情 | ',$url);

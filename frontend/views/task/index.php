@@ -190,12 +190,11 @@ $this->params['breadcrumbs'][] = $this->title;
                 },
             
                 'view-answer'=>function ($url,$model,$key){
-                if(yii::$app->user->identity->role_id==89 ||yii::$app->user->identity->role_id==88)
                      return Html::a('任务结果 | ',$url,['title'=>'任务结果']);
                     },
                 'off-line'=>function ($url,$model,$key){
                  if($model->status==2 && yii::$app->user->identity->role_id==89 ||yii::$app->user->identity->role_id==88)
-                    return Html::a('下线',$url,['title'=>'下线任务']);
+                    return Html::a('下线',$url,['title'=>'下线任务','data'=>['confirm'=>'您确定要下线此任务吗?','method'=>'post']]);
                     },
                     'on-line'=>function ($url,$model,$key){
                     if($model->status==3 && (yii::$app->user->identity->role_id==89 ||yii::$app->user->identity->role_id==88))

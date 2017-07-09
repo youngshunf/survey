@@ -18,7 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
 </div>
     <div class="box-body">
-
+    <p><a class="btn btn-warning pull-right" href="/user/export-user">导出用户</a></p>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,

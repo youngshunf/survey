@@ -45,7 +45,6 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'name',
             'tasknum',
-            'shop',
             ['attribute'=>'任务进度',
             'value'=>$doneRate.'%',
             ],
@@ -63,10 +62,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class="box-header with-border">
                   <h3 class="box-title">项目问题</h3>
                   <div class="box-tools pull-right">
-                    <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                    <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
                   </div><!-- /.box-tools -->
                 </div><!-- /.box-header -->
-                <div class="box-body">
+                <div class="box-body" style="display: none">
                  <?php if(yii::$app->user->identity->role_id==89 ||yii::$app->user->identity->role_id==88){?>
           <a class="btn btn-warning  option" id="option">添加问题</a>
 <!--            <a class="btn btn-success  template" id="template">设置为问卷模板</a> -->
@@ -76,7 +75,11 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $questionDataProvider,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn','header'=>'序号'],
-            'name',
+           
+            ['attribute' => 'name',
+            'value' => 'name',
+            'headerOptions' => ['width' => '200'],
+            ],
             'code',
              ['attribute'=>'type',
             'label'=>'题型',
@@ -370,7 +373,7 @@ $this->params['breadcrumbs'][] = $this->title;
        </p>   
        <?php }?>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-    <?php if(yii::$app->user->identity->role_id==89 ||yii::$app->user->identity->role_id==88){?>
+    <?php if(yii::$app->user->identity->role_id==89 ||yii::$app->user->identity->role_id==88 ||yii::$app->user->identity->role_id==87){?>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
@@ -457,10 +460,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 },
                 'task/off-line'=>function ($url,$model,$key){
                 if($model->status==2)
-                    return Html::a('下线',$url,['title'=>'下线任务']);
+                    return Html::a('下线',$url,['title'=>'下线任务','data'=>['confirm'=>'您确定要下线此任务吗?','method'=>'post']]);
                 },
                 'task/on-line'=>function ($url,$model,$key){
-                if($model->status==3 && (yii::$app->user->identity->role_id==89 ||yii::$app->user->identity->role_id==88))
+                
                     return Html::a('上线','javascript:;',['title'=>'上线任务','onClick'=>"onLine($model->id)"]);
                 },
                 ]
@@ -519,6 +522,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'template'=>'{task/view}{task/update}{task/delete}{task/view-answer}{task/on-line}',
             'buttons'=>[
                 'task/view'=>function ($url,$model,$key){
+                if(yii::$app->user->identity->role_id==89 ||yii::$app->user->identity->role_id==88)
                 return Html::a('查看 | ',['task/view','id'=>$model->id,'project_id'=>$model->project_id],['title'=>'查看']);   
             },
                 'task/update'=>function ($url,$model,$key){

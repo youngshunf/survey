@@ -447,7 +447,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 },
                 'task/off-line'=>function ($url,$model,$key){
                 if($model->status==2)
-                    return Html::a('下线',$url,['title'=>'下线任务']);
+                    return Html::a('下线',$url,['title'=>'下线任务','data'=>['confirm'=>'您确定要下线此任务吗?','method'=>'post']]);
                 },
                 'task/on-line'=>function ($url,$model,$key){
                 if($model->status==3)

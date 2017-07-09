@@ -188,12 +188,8 @@ class TaskController extends Controller
 							    ."<p>
 								<span class='sub'>剩余 : ".intval(@$v['number']-@$v['count_done'])."</span>
 							</p>
+							
 							<p>
-								<span class='sub'>截止 : ".CommonUtil::fomatDate(@$v['end_time'])."</span>
-								<span class='pull-right'>
-								</span>
-							</p>
-							<p >
 								<span style='font-size: 12px;'>地址:". @$v['address']."(" . sprintf("%.2f",(@$v['dist']*30)/1000)."km）</span>
 							</p>
 							<p><a  href='../task-detail.html?task_guid=".@$v['task_guid']."' >查看详情</a></p>

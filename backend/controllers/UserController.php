@@ -14,6 +14,7 @@ use common\models\Group;
 use common\models\GroupUser;
 use common\models\LoginRec;
 use common\models\Answer;
+use common\models\CommonUtil;
 
 /**
  * UserController implements the CRUD actions for User model.
@@ -219,6 +220,65 @@ class UserController extends Controller
                 'model' => $model,
             ]);
         }
+    }
+    
+    //导出问题答案
+    public function actionExportUser(){
+       
+        $users=User::find()->orderBy('created_at desc')->all();
+    
+    
+        $resultExcel=new \PHPExcel();
+        $resultExcel->getActiveSheet()->setCellValue('A1','序号');
+        $resultExcel->getActiveSheet()->setCellValue('B1','姓名');
+        $resultExcel->getActiveSheet()->setCellValue('C1','性别');
+        $resultExcel->getActiveSheet()->setCellValue('D1','支付宝');
+        $resultExcel->getActiveSheet()->setCellValue('E1','手机号');
+        $resultExcel->getActiveSheet()->setCellValue('F1','邮箱');
+        $resultExcel->getActiveSheet()->setCellValue('G1','地址');
+        $resultExcel->getActiveSheet()->setCellValue('H1','身份证号');
+        $resultExcel->getActiveSheet()->setCellValue('I1','年龄');
+        $resultExcel->getActiveSheet()->setCellValue('J1','注册时间');
+       
+         
+      
+    
+        $i=2;
+        foreach ($users as $k=>$v){
+            
+                $resultExcel->getActiveSheet()->setCellValue('A'.$i,$k+1);
+                $resultExcel->getActiveSheet()->setCellValue('B'.$i,$v['name']);
+                $resultExcel->getActiveSheet()->setCellValue('C'.$i,$v['sex']);
+                $resultExcel->getActiveSheet()->setCellValue('D'.$i,$v['alipay']);
+                $resultExcel->getActiveSheet()->setCellValue('E'.$i,$v['mobile']);
+                $resultExcel->getActiveSheet()->setCellValue('F'.$i,$v['email']);
+                $resultExcel->getActiveSheet()->setCellValue('G'.$i,$v['address']);
+                $resultExcel->getActiveSheet()->setCellValue('H'.$i,$v['identityno']);
+                $resultExcel->getActiveSheet()->setCellValue('I'.$i,$v['age']);
+                $resultExcel->getActiveSheet()->setCellValue('J'.$i,CommonUtil::fomatTime($v['created_at']));
+              
+    
+                
+                $i++;
+    
+            }
+             
+    
+        
+    
+        //设置导出文件名
+        $outputFileName ="随心赚用户".date('Y-m-d').'.xls';
+        $xlsWriter = new \PHPExcel_Writer_Excel5($resultExcel);
+        header("Content-Type: application/force-download");
+        header("Content-Type: application/octet-stream");
+        header("Content-Type: application/download");
+        header('Content-Disposition:inline;filename="'.$outputFileName.'"');
+        header("Content-Transfer-Encoding: binary");
+        header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
+        header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
+        header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+        header("Pragma: no-cache");
+        $xlsWriter->save( "php://output" );
     }
     
     public function actionAdminUser(){

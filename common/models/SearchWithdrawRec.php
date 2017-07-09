@@ -10,19 +10,21 @@ use common\models\Wallet;
 /**
  * SearchWallet represents the model behind the search form about `common\models\Wallet`.
  */
-class SearchWallet extends Wallet
+class SearchWithdrawRec extends WithdrawRec
 {
     /**
      * @inheritdoc
      */
     public $name;
     public $mobile;
+    public $address;
+    
     public function rules()
     {
         return [
-            [['id', 'created_at', 'updated_at'], 'integer'],
-            [['user_guid','name','mobile'], 'safe'],
-            [['non_payment', 'paid', 'total_income', 'withdrawing'], 'number'],
+           
+            [['name','mobile','address'], 'safe'],
+            [['amount','status'], 'number'],
         ];
     }
 
@@ -44,9 +46,9 @@ class SearchWallet extends Wallet
      */
     public function search($params)
     {
-        $query = Wallet::find();
+        $query = WithdrawRec::find();
         $query->joinWith(['user']);
-        $query->select("wallet.*, user.*")->orderBy('wallet.created_at desc');
+        $query->select("withdraw_rec.*, user.name,user.mobile,user.address")->orderBy('withdraw_rec.created_at desc');
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -61,15 +63,13 @@ class SearchWallet extends Wallet
         }
 
         $query->andFilterWhere([
-            'id' => $this->id,
-            'non_payment' => $this->non_payment,
-            'paid' => $this->paid,
+          
             'user.name'=>$this->name,
             'user.mobile'=>$this->mobile,
-            'total_income' => $this->total_income,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
-            'withdrawing' => $this->withdrawing,
+            'user.address' => $this->address,
+            'amount' => $this->amount,
+            'status' => $this->status,
+         
         ]);
 
       

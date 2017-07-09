@@ -11,11 +11,12 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\data\ActiveDataProvider;
 use common\models\WithdrawRec;
+use common\models\SearchWithdrawRec;
 use common\models\Orders;
 use common\models\AdminWallet;
 use yii\filters\AccessControl;
 use yii\db\Exception;
-use common\models\Task;
+
 
 /**
  * FinanceController implements the CRUD actions for Wallet model.
@@ -52,9 +53,9 @@ public function behaviors()
     public function actionIndex()
     {
         
-        $dataProvider = new ActiveDataProvider([
-            'query'=>WithdrawRec::find()->orderBy('created_at desc')
-        ]);
+       
+        $searchModel = new SearchWithdrawRec();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         
         $orders = new ActiveDataProvider([
             'query'=>Orders::find()->orderBy('created_at desc')
@@ -63,6 +64,7 @@ public function behaviors()
         return $this->render('index', [
             'orders' => $orders,
             'dataProvider' => $dataProvider,
+            'searchModel'=>$searchModel
         ]);
     }
     
