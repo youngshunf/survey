@@ -60,13 +60,6 @@ class TaskController extends Controller
         //更新任务状态
         $now=time();
         Task::updateAll(['status'=>3]," end_time < $now ");
-        
-        $clientUser=$_POST['user'];
-        //验证用户
-        $user=User::find()->andWhere(['user_guid'=>$clientUser['user_guid'],'access_token'=>$clientUser['access_token']])->one();
-        if(empty($user)){
-            return CommonUtil::error('e1006');
-        }
         $page=@$_POST['data']['page'];
         $lat = @$_POST['data']['locInfo']['lat']*3600*256;
         $lng = @$_POST['data']['locInfo']['lng']*3600*256;
@@ -107,7 +100,13 @@ class TaskController extends Controller
                 break;
         }
         
-        $groupUser=GroupUser::findAll(['user_guid'=>$user->user_guid]);
+        
+        $clientUser=@$_POST['user'];
+        //验证用户
+        $user=User::find()->andWhere(['user_guid'=>@$clientUser['user_guid'],'access_token'=>@$clientUser['access_token']])->one();
+        if(!empty($user)){
+            $groupUser=GroupUser::findAll(['user_guid'=>$user->user_guid]);
+        }
         if(empty($groupUser)){
             $where .=" and group_id = 0 ";
         }else {
@@ -492,17 +491,26 @@ class TaskController extends Controller
      * 提交任务答案
      */
     public function  actionSubmitAnswer(){
+        if(!isset($_POST['user'])){
+            return CommonUtil::error('e1006');
+        }
         $clientUser=$_POST['user'];
         //验证用户
-        $user=User::find()->andWhere(['user_guid'=>$clientUser['user_guid'],'access_token'=>$clientUser['access_token']])->one();
+        $user=User::find()->andWhere(['user_guid'=>@$clientUser['user_guid'],'access_token'=>@$clientUser['access_token']])->one();
        
         if(empty($user)){
             return CommonUtil::error('e1006');
         }
-        $data=$_POST['data'];
-        $locInfo=$_POST['locInfo'];
-        $task_guid=$_POST['task_guid'];
+        $data= @$_POST['data'];
+        if(empty($data)){
+            return CommonUtil::error('e1006');
+        }
+        $locInfo= @$_POST['locInfo'];
+        $task_guid= @$_POST['task_guid'];
         foreach ($data as $v){
+            if(empty($v['answer'])){
+                continue;
+            }
             $type=$v['type'];
            if ($type==3){
                 $answerDetail=AnswerDetail::findOne(['answer_guid'=>@$v['answer_guid'],'task_guid'=>$v['task_guid'],'user_guid'=>$user->user_guid,'question_guid'=>$v['question_guid'],'answer'=>$v['imageIndex']]);
@@ -519,7 +527,7 @@ class TaskController extends Controller
             $answer=Answer::findOne(['answer_guid'=>@$v['answer_guid'],'task_guid'=>$task_guid,'user_guid'=>$user->user_guid]);
 
             if(empty($answer)){
-                return CommonUtil::error('e1002');
+               continue;
             }
 
             $answerDetail->answer_guid=@$answer->answer_guid;
@@ -533,14 +541,16 @@ class TaskController extends Controller
                 $answerDetail->answer_time=substr($answer_time, 0,$len-3);
             }
             $answerDetail->answer_address=@$v['answer_address']['address'];
-            $answerDetail->code=$v['code'];
+            $answerDetail->code=@$v['code'];
             if($type==0){//单选题
-                $answerDetail->answer=$v['answer'];
+                $answerDetail->answer=@$v['answer'];
                 $answerDetail->open_answer=@$v['open_answer'];
             }elseif($type==2 ||$type==6 ||$type==7){
-                $answerDetail->answer=$v['answer'];
+                $answerDetail->answer=@$v['answer'];
             }elseif ($type==1){
-                $answerDetail->answer=json_encode($v['answer'],JSON_UNESCAPED_UNICODE);
+                if(!empty($v['answer'])){
+                    $answerDetail->answer=json_encode(@$v['answer'],JSON_UNESCAPED_UNICODE);
+                }
             }elseif($type==3){
                 $waterMaskStr= $answerDetail->answer_address;
                 if(empty($waterMaskStr)){
@@ -549,13 +559,15 @@ class TaskController extends Controller
                 if(empty($answerDetail->answer_time)){
                     $answerDetail->answer_time=time();
                 } 
-         
-                $photo=ImageUploader::uploadImageByBase64($v['answer'][0]['imgData'], $v['answer'][0]['imgLen'],$waterMaskStr,$answerDetail->answer_time);
+               
+                if(!empty($v['answer'][0])&&!empty($v['answer'][0]['imgData'])&&!empty($v['answer'][0]['imgLen'])){
+                $photo=ImageUploader::uploadImageByBase64(@$v['answer'][0]['imgData'], @$v['answer'][0]['imgLen'],$waterMaskStr,$answerDetail->answer_time);
                 if($photo){
                     $answerDetail->path=$photo['path'];
                     $answerDetail->photo=$photo['photo'];
                     $answerDetail->answer=$v['imageIndex'];
                 } 
+                }
             }
            
             $answerDetail->save();                      
