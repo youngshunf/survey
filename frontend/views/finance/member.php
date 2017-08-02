@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use common\models\CommonUtil;
 
 /* @var $this yii\web\View */
 /* @var $searchModel common\models\SearchWallet */
@@ -24,8 +25,24 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn','header'=>'序号'],
-            'user.name',
-            'user.mobile',
+             ['attribute'=>'user.name',
+            'format'=>'html',
+            'value'=>function ($model){
+                return CommonUtil::truncateName( $model->user->name);
+             }
+            ],
+            ['attribute'=>'user.mobile',
+            'format'=>'html',
+            'value'=>function ($model){
+                return CommonUtil::truncateMobile( $model->user->mobile);
+            }
+            ],
+            ['attribute'=>'user.alipay',
+            'format'=>'html',
+            'value'=>function ($model){
+                return CommonUtil::truncateMobile( $model->user->alipay);
+            }
+            ],
             'user.alipay',
             'amount',
             ['attribute'=>'created_at',

@@ -304,6 +304,22 @@ class UserController extends Controller
         }
     }
 
+    public function actionEnable($id)
+    {
+        $model = $this->findModel($id);
+        if($model->enable==1){
+            $model->enable=0;
+            $model->save();
+            yii::$app->getSession()->setFlash('success','禁用成功');
+            return $this->redirect(yii::$app->request->referrer);
+        }else {
+            $model->enable=1;
+            $model->save();
+            yii::$app->getSession()->setFlash('success','启用成功');
+            return $this->redirect(yii::$app->request->referrer);
+        }
+        return $this->redirect(yii::$app->request->referrer);
+    }
     /**
      * Deletes an existing User model.
      * If deletion is successful, the browser will be redirected to the 'index' page.

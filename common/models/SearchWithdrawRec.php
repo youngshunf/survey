@@ -63,16 +63,13 @@ class SearchWithdrawRec extends WithdrawRec
         }
 
         $query->andFilterWhere([
-          
-            'user.name'=>$this->name,
-            'user.mobile'=>$this->mobile,
-            'user.address' => $this->address,
             'amount' => $this->amount,
             'status' => $this->status,
-         
         ]);
 
-      
+        $query->andFilterWhere(['like', 'user.name', $this->name])
+        ->andFilterWhere(['like', 'user.mobile', $this->mobile])
+        ->andFilterWhere(['like', 'user.address', $this->address]);
 
         return $dataProvider;
     }

@@ -35,13 +35,20 @@ $this->params['breadcrumbs'][] = $this->title;
             'alipay',
             'email',
             'address',
+            ['attribute'=>'enable',
+                'label'=>'启用状态',
+                'filter'=>['1'=>'已启用','0'=>'已禁用'],
+             'value'=>function ($model){
+              return $model->enable==1?'已启用':'已禁用';
+            }
+            ],
             ['attribute'=>'created_at',
             'format'=>['date','php: Y-m-d H:i:s'],
             ],
              ['class' => 'yii\grid\ActionColumn',
             'header'=>'操作',
             'options'=>['width'=>'250px'],
-            'template'=>'{view}{update}{delete}{view-task}',
+            'template'=>'{view}{update}{delete}{enable}{view-task}',
             'buttons'=>[
               'view'=>function ($url,$model,$key){
                      return Html::a('查看 | ',$url,['title'=>'查看']);
@@ -54,6 +61,14 @@ $this->params['breadcrumbs'][] = $this->title;
             'delete'=>function ($url,$model,$key){
              
                return Html::a('删除 | ',$url,['title'=>'删除']);
+            },
+            'enable'=>function ($url,$model,$key){
+             if($model->enable==1){
+                 return Html::a('禁用 | ',$url,['title'=>'禁用']);
+             }else{
+                 return Html::a('启用 | ',$url,['title'=>'启用']);
+             }
+           
             },
              'view-task'=>function ($url,$model,$key){
                 return Html::a('查看任务  ',$url,['title'=>'查看']);   

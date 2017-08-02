@@ -515,8 +515,13 @@ use yii\helpers\Json;
      }
      
     public static  function truncateMobile($mobile){
-         return substr($mobile, 0,2).'****'.substr($mobile, 7,10);
+         return substr($mobile, 0,3).'****'.substr($mobile, 7,10);
      }
+     
+    public static  function truncateName($name){
+        return mb_substr(strip_tags($name), 0,1,'utf-8').'*';
+     }
+      
 		
 	}
 	

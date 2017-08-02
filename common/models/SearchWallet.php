@@ -64,15 +64,13 @@ class SearchWallet extends Wallet
             'id' => $this->id,
             'non_payment' => $this->non_payment,
             'paid' => $this->paid,
-            'user.name'=>$this->name,
-            'user.mobile'=>$this->mobile,
             'total_income' => $this->total_income,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'withdrawing' => $this->withdrawing,
         ]);
-
-      
+        $query->andFilterWhere(['like', 'user.name', $this->name])
+        ->andFilterWhere(['like', 'user.mobile', $this->mobile]);
 
         return $dataProvider;
     }

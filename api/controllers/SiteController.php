@@ -173,7 +173,9 @@ class SiteController extends Controller
             //用户手机未注册
             return CommonUtil::error('e1004');
         }
-    
+        if($user->enable==0){
+            return CommonUtil::error('e1009');
+        }
         $user->password=md5($password);
         $user->generateAccessToken();
         $user->updated_at=time();
@@ -261,6 +263,9 @@ class SiteController extends Controller
             if(empty($user)){
                 return CommonUtil::error('e1006');
        }
+       if($user->enable==0){
+           return CommonUtil::error('e1009');
+       }
        // $user->generateAccessToken();
         $user->last_ip=yii::$app->request->getUserIP();
         $user->last_login_time=time();
@@ -297,6 +302,9 @@ class SiteController extends Controller
         if($user===null){
             return CommonUtil::error('e1005');
         }   
+        if($user->enable==0){
+            return CommonUtil::error('e1009');
+        }
        // $user->generateAccessToken();
         $user->last_ip=yii::$app->request->getUserIP();
         $user->last_login_time=time();
@@ -333,7 +341,7 @@ class SiteController extends Controller
 //        }
        $wgtUrl= 'http://images.suoxinmr.com/wgt/H55174E5A.wgt';
       $updateInfo=[
-          'newVer'=>'1.3.5',
+          'newVer'=>'1.4.0',
           'wgtUrl'=>$wgtUrl
       ];
       
