@@ -575,7 +575,7 @@ class TaskController extends Controller
         return $this->redirect(yii::$app->request->referrer);
     }
     
-    public function actionUpdateQuestionDo(){
+ public function actionUpdateQuestionDo(){
         $task_guid=$_POST['task_guid'];
         $task=Task::findOne(['task_guid'=>$task_guid]);
         $required=@$_POST['required'];
@@ -584,6 +584,65 @@ class TaskController extends Controller
         $type=$question->type;
         $name=$_POST['name'];
         $options=array();
+        if(!empty($question->project_id)){
+            $questionArr=Question::find()->andWhere(['project_id'=>$question->project_id,'code'=>$question->code])->all();
+            foreach ($questionArr as $question){
+                $options=array();
+                if($type==0){
+                    $optArr=$_POST['optArr'];
+                    $link=$_POST['link'];
+                    $open=$_POST['open'];
+                    $refer=$_POST['refer'];
+                    $i=0;
+                    foreach ($optArr as $v){
+                        if(empty($v)){
+                            continue;
+                        }
+                        $options[]=[
+                            'opt'=>$v,
+                            'link'=>$link[$i],
+                            'open'=>$open[$i],
+                            'refer'=>$refer[$i],
+                        ];
+                        $i++;
+                    }
+                }elseif ($type==1){
+                    $optArrMulti=$_POST['optArrMulti'];
+                    foreach ($optArrMulti as $v){
+                        if(empty($v)){
+                            continue;
+                        }
+                        $options[]=$v;
+                    }
+                }elseif ($type==7){
+                    $options=[
+                        'min'=>@$_POST['minnum'],
+                        'max'=>@$_POST['maxnum']
+                    ];
+                }
+                
+                if($required==1){
+                    $question->required=1;
+                }
+                $question->name=$name;
+                if($type==0 || $type==1 ||$type==7){
+                    $question->options=json_encode($options);
+                }elseif ($type==5){
+                    $question->qrcode_value=$_POST['qrcode-value'];
+                }elseif ($type==3){
+                    $question->max_photo=$_POST['imgnum'];
+                }
+                
+                $question->updated_at=time();
+                if($question->save()){
+                    yii::$app->getSession()->setFlash('success','问题修改成功');
+                }else{
+                    yii::$app->getSession()->setFlash('error','问题修改失败');
+                }
+            }
+            
+            return $this->redirect(['project/view','id'=>$question->project_id]);
+        }else{
         if($type==0){
             $optArr=$_POST['optArr'];
                 $link=$_POST['link'];
@@ -636,6 +695,9 @@ class TaskController extends Controller
                     yii::$app->getSession()->setFlash('error','问题修改失败');
                 }
                 return $this->redirect(['view','id'=>$task->id]);
+        }
+                
+               
     
     }
     
