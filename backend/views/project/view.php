@@ -44,7 +44,6 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'name',
             'tasknum',
-            'shop',
             ['attribute'=>'任务进度',
             'value'=>$doneRate.'%',
             ],
@@ -62,10 +61,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class="box-header with-border">
                   <h3 class="box-title">项目问题</h3>
                   <div class="box-tools pull-right">
-                    <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                    <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
                   </div><!-- /.box-tools -->
                 </div><!-- /.box-header -->
-                <div class="box-body">
+                <div class="box-body" style="display: none">
           <a class="btn btn-warning  option" id="option">添加问题</a>
 <!--            <a class="btn btn-success  template" id="template">设置为问卷模板</a> -->
            <a class="btn btn-warning"  href="<?= Url::to(['task/choose-template','id'=>$model->id,'project_id'=>@$model->id])?>">从模板库中选择</a>
@@ -447,7 +446,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 },
                 'task/off-line'=>function ($url,$model,$key){
                 if($model->status==2)
-                    return Html::a('下线',$url,['title'=>'下线任务']);
+                    return Html::a('下线',$url,['title'=>'下线任务','data'=>['confirm'=>'您确定要下线此任务吗?','method'=>'post']]);
                 },
                 'task/on-line'=>function ($url,$model,$key){
                 if($model->status==3)

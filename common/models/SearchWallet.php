@@ -15,11 +15,13 @@ class SearchWallet extends Wallet
     /**
      * @inheritdoc
      */
+    public $name;
+    public $mobile;
     public function rules()
     {
         return [
             [['id', 'created_at', 'updated_at'], 'integer'],
-            [['user_guid'], 'safe'],
+            [['user_guid','name','mobile'], 'safe'],
             [['non_payment', 'paid', 'total_income', 'withdrawing'], 'number'],
         ];
     }
@@ -43,6 +45,8 @@ class SearchWallet extends Wallet
     public function search($params)
     {
         $query = Wallet::find();
+        $query->joinWith(['user']);
+        $query->select("wallet.*, user.*")->orderBy('wallet.created_at desc');
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -65,8 +69,8 @@ class SearchWallet extends Wallet
             'updated_at' => $this->updated_at,
             'withdrawing' => $this->withdrawing,
         ]);
-
-        $query->andFilterWhere(['like', 'user_guid', $this->user_guid]);
+        $query->andFilterWhere(['like', 'user.name', $this->name])
+        ->andFilterWhere(['like', 'user.mobile', $this->mobile]);
 
         return $dataProvider;
     }

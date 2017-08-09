@@ -19,7 +19,7 @@ class SearchUser extends User
     {
         return [
             [['access_token', 'imei', 'imsi', 'name', 'password', 'province', 'city', 'nick', 'mobile', 'telephone', 'head_img', 'address', 'email', 'age', 'birthday', 'path', 'photo'], 'safe'],
-            [['sex', 'score', 'created_at', 'updated_at', 'id'], 'integer'],
+            [['sex', 'score', 'created_at', 'updated_at', 'id','enable'], 'integer'],
         ];
     }
 
@@ -41,7 +41,7 @@ class SearchUser extends User
      */
     public function search($params)
     {
-        $query = User::find();
+        $query = User::find()->orderBy('created_at desc');
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -60,6 +60,7 @@ class SearchUser extends User
             'score' => $this->score,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
+            'enable'=>$this->enable,
             'id' => $this->id,
         ]);
 

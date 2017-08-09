@@ -22,7 +22,11 @@ $this->params['breadcrumbs'][] = $this->title;
                 
                 <div class="row">
                 <div class=" col-md-3 col-sm-3">
+                <?php if(empty($model->photo)){?>
                 <img alt="" src="<?= yii::getAlias('@avatar')?>/unknown.jpg" class="img-responsive">
+                <?php }else{?>
+                <img alt="" src="<?= yii::getAlias('@avatar').'/'.$model->path.'thumb/'.$model->photo?>" class="img-responsive">
+                <?php }?>
                 </div>
                 <div class=" col-md-9 col-sm-9">
                         <?= DetailView::widget([

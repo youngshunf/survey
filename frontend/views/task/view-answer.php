@@ -27,8 +27,18 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn','header'=>'序号'],
-            'user.name',
-            'user.mobile',
+            ['attribute'=>'user.name',
+            'format'=>'html',
+            'value'=>function ($model){
+                return CommonUtil::truncateName( $model->user->name);
+             }
+            ],
+            ['attribute'=>'user.mobile',
+            'format'=>'html',
+            'value'=>function ($model){
+                return CommonUtil::truncateMobile( $model->user->mobile);
+            }
+            ],
              ['attribute'=>'status',
             'format'=>'html',
             'value'=>function ($model){
@@ -113,7 +123,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\ActionColumn',
             'header'=>'操作',
             'options'=>['width'=>'150px'],
-            'template'=>'{view-answer-detail}{view-answer-auth}',
+            'template'=>'{view-answer-detail}',
             'buttons'=>[  
                 'view-answer-detail'=>function ($url,$model,$key){
                 return Html::a('查看结果详情 | ',$url);

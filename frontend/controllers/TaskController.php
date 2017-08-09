@@ -302,6 +302,9 @@ class TaskController extends Controller
         if(isset($_GET['status'])){
             $status=$_GET['status'];
         }
+        if(yii::$app->user->identity->role_id==86){
+            $status=3;
+        }
         
         if ($status!=0){
             $where=" status=$status";
@@ -1149,6 +1152,14 @@ class TaskController extends Controller
                     if(!empty($answerDetail)){
                         $url=yii::$app->urlManager->createAbsoluteUrl(['task/view-answer-photo', 'answer_guid'=>$item['answer_guid'],'task_guid'=>$task_guid,'question_guid'=>$v['question_guid'],'user_guid'=>$item['user_guid']]);
                         $resultExcel->getActiveSheet()->setCellValue($col.$i,"图片");
+                        $resultExcel->getActiveSheet()->getCell($col.$i)->getHyperlink()->setUrl($url);
+                        $resultExcel->getActiveSheet()->getStyle($col.$i)->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
+                    }
+                }elseif ($v->type==4){
+                    $answerDetail=AnswerDetail::findOne(['answer_guid'=>$item['answer_guid'],'task_guid'=>$task_guid,'question_guid'=>$v['question_guid'],'user_guid'=>$item['user_guid']]);
+                    if(!empty($answerDetail)){
+                        $url=yii::getAlias('@photo').'/'.$answerDetail['path'].$answerDetail['photo'];
+                        $resultExcel->getActiveSheet()->setCellValue($col.$i,"录音");
                         $resultExcel->getActiveSheet()->getCell($col.$i)->getHyperlink()->setUrl($url);
                         $resultExcel->getActiveSheet()->getStyle($col.$i)->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
                     }

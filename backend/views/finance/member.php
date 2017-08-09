@@ -25,8 +25,16 @@ $this->params['breadcrumbs'][] = $this->title;
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn','header'=>'序号'],
-            'user.name',
-            'user.mobile',
+            [
+            'attribute' => 'name',
+            'value' => 'user.name',
+            'label' => '姓名',
+            ],
+            [
+            'attribute' => 'mobile',
+            'value' => 'user.mobile',
+            'label' => '手机号',
+            ],           
             'user.alipay',
             'non_payment',
             'paid',

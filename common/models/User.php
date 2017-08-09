@@ -73,7 +73,7 @@ class User extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['score', 'created_at', 'updated_at', 'last_login_time',  'estate', 'car_num'], 'integer'],
+            [['score', 'created_at', 'updated_at', 'last_login_time',  'estate', 'car_num','enable'], 'integer'],
             [['user_guid','path','photo'], 'string'],
             [['access_token', 'imei', 'imsi', 'name', 'password', 'province', 'city', 'nick', 'email', 'age', 'birthday', 'bank_name', 'bank_account', 'alipay', 'major', 'income_level', 'computer_level'], 'string', 'max' => 64],
             [['mobile', 'telephone', 'weixin'], 'string', 'max' => 32],

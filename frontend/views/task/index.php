@@ -31,9 +31,10 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= Html::a('发布任务', ['create'], ['class' => 'btn btn-warning']) ?>
        </p>   
        <?php }?>
-    <?php  echo $this->render('_search', ['model' => $searchModel]);
-    if(yii::$app->user->identity->role_id==89 ||yii::$app->user->identity->role_id==88){
-    ?>
+
+    <?php  echo $this->render('_search', ['model' => $searchModel]); ?>
+    <?php if(yii::$app->user->identity->role_id==89 ||yii::$app->user->identity->role_id==88){?>
+
     
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -88,7 +89,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'view'=>function ($url,$model,$key){
                 if(yii::$app->user->identity->role_id==89 ||yii::$app->user->identity->role_id==88)
                 return Html::a('查看 | ',$url,['title'=>'查看']);   
-            },
+               },
                 'update'=>function ($url,$model,$key){
                 if(yii::$app->user->identity->role_id==89 ||yii::$app->user->identity->role_id==88){
                if($model->user_guid==yii::$app->user->identity->user_guid &&$model->status==0){
@@ -193,7 +194,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     },
                 'off-line'=>function ($url,$model,$key){
                  if($model->status==2 && yii::$app->user->identity->role_id==89 ||yii::$app->user->identity->role_id==88)
-                    return Html::a('下线',$url,['title'=>'下线任务']);
+                    return Html::a('下线',$url,['title'=>'下线任务','data'=>['confirm'=>'您确定要下线此任务吗?','method'=>'post']]);
                     },
                     'on-line'=>function ($url,$model,$key){
                     if($model->status==3 && (yii::$app->user->identity->role_id==89 ||yii::$app->user->identity->role_id==88))
@@ -205,7 +206,9 @@ $this->params['breadcrumbs'][] = $this->title;
         'tableOptions'=>['class'=>'table table-striped table-responsive'],
     ]); ?>
 
-<?php }?>
+   
+    <?php }?>
+
 </div>
 </div>
 

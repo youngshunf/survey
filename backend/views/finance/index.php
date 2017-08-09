@@ -71,19 +71,35 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
+        'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn','header'=>'序号'],
-            'user.name',
-            'user.mobile',
+              [
+            'attribute' => 'name',
+            'value' => 'user.name',
+            'label' => '姓名',
+            ],
+            [
+            'attribute' => 'mobile',
+            'value' => 'user.mobile',
+            'label' => '手机号',
+            ],  
             'user.alipay',
+            ['attribute' => 'address',
+            'value' => 'user.address',
+            'label' => '地址',
+            ], 
             'amount',
             ['attribute'=>'status',
+              'filter'=>['0'=>'待付款','1'=>'已付款','99'=>'已驳回'],
             'value'=>function ($model){
             return CommonUtil::getDescByValue('withdraw', 'status', $model->status);
-    },
+             },
             ],
-           ['attribute'=>'created_at',
-            'format'=>['date','php: Y-m-d H:i:s'],
+            ['attribute'=>'created_at',
+            'value'=>function ($model){
+            return CommonUtil::fomatTime($model->created_at);
+             },
             ],
 
             ['class' => 'yii\grid\ActionColumn',
