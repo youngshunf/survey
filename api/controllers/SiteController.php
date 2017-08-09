@@ -338,6 +338,7 @@ class SiteController extends Controller
       ];
       
       return json_encode($updateInfo);
+      
     
     }
 
