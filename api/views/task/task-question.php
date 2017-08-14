@@ -287,13 +287,9 @@ use common\models\CommonUtil;
         				<div>
         					
         				<div id="dcontent" class="dcontent mui-center">
-						<br/>
-						<img style="width:40%" class="center" id="bimg" src="../images/barcode.png"/>
-						<br/>
-						<br/>
 						<div class="mui-btn mui-btn-danger mui-btn-block" onclick="startScan(<?= $v->code?>)">扫一扫</div>
 						<br/>
-						<ul id="barcode-history<?= $v->code?>" class="dlist" style="text-align:left;">
+						<ul id="barcode-history<?= $v->code?>" class="dlist mui-table-view" style="text-align:left;">
 							<li id="nohistory" class="ditem" onclick="onempty();">	</li>
 						</ul>
 						<br/>
