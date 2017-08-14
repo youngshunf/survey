@@ -50,8 +50,86 @@ class TaskController extends Controller
         
         return parent::beforeAction($action);
     }
+    public  function post($url, $data){//file_get_content
+        
+        $postdata = http_build_query($data, '', '&'); 
+        $code=base64_encode('ehsure@2017:8BiUk$.)tpJ8wt$Cs[p0Sjv+[*iF^p');
+        $opts = array('http' =>
+            array(
+                'method'  => 'POST',
+                'header'=>"Content-type:application/x-www-form-urlencoded\r\n".
+                "Authorization:Basic " . $code .'\r\n',
+                'content' => $postdata
+            )
+        );
+        $context = stream_context_create($opts);
+        $result = file_get_contents($url, false, $context);
+        
+        return $result;
+        
+    }
     
-  
+    public function  actionTestCode(){
+        $url="https://qr.huggies.com.cn:8066/api/proj/openapi/flow/codeflow";
+        $data=[
+            'code'=>'00581708300000737243',
+            'terminalType'=>'IOS',
+            'locateAddress'=>'北京市海淀区',
+            'locateProvince'=>'北京',
+            'locateCity'=>'北京',
+            'inputAddress'=>'北京海淀',
+            'deviceLocateAddress'=>'北京海淀'
+        ];
+//         $res=$this->post($url,$data);
+       $res=CommonUtil::vpost($url,$data);
+        print_r($res);die;
+    }
+    
+    public function  actionQueryCode(){
+        
+        $url="https://qr.huggies.com.cn:8066/api/proj/openapi/flow/codeflow";
+       $ua=yii::$app->request->getUserAgent();
+       if(strstr($ua, 'Android')){
+           $terminalType= 'ANDROID';
+       }else{
+           $terminalType= 'IOS';
+       }
+        $code=@$_POST['data']['code'];
+        $locIngo=@$_POST['data']['locInfo'];
+        $address=@$locIngo['address'];
+        $str1=explode('省', $address);
+        $province='';
+        $city='';
+        if(count($str1)==2){
+            $province=$str1[0];
+            $str2=explode('市', $str1[1]);
+            if(count($str2)==2){
+                $city=$str2[0];
+            }
+        }else{
+            $str1=explode('市', $address);
+            if(count($str1)==2){
+                $province=$str1[0];
+                $str2=explode('区', $str1[1]);
+                if(count($str2)==2){
+                    $city=$str2[0];
+                }
+            }
+        }
+        $code='00581708300000737243';
+        $data=[
+            'code'=>$code,
+            'terminalType'=>$terminalType,
+            'locateAddress'=>@$locIngo['address'],
+            'locateProvince'=>$province,
+            'locateCity'=>$city,
+            'inputAddress'=>@$locIngo['address'],
+            'deviceLocateAddress'=>@$locIngo['address']
+        ];
+        //         $res=$this->post($url,$data);
+        $res=CommonUtil::vpost($url,$data);
+        return CommonUtil::success($res);
+    }
         
     /**
      * 获取任务列表
@@ -314,6 +392,7 @@ class TaskController extends Controller
         }
         
     }
+    
     
     /**
      * 获取任务列表
