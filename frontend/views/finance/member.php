@@ -43,7 +43,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 return CommonUtil::truncateMobile( $model->user->alipay);
             }
             ],
-            'user.alipay',
+         
             'amount',
             ['attribute'=>'created_at',
                'label'=>'时间',
