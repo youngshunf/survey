@@ -286,16 +286,40 @@ use common\models\CommonUtil;
         					<li class="mui-table-view-cell">
         				<div>
         					
-        				<div id="dcontent" class="dcontent mui-center">
-						<br/>
+        				<div id="dcontent" class="dcontent ">
+<!-- 						<br/> 
 						<img style="width:40%" class="center" id="bimg" src="../images/barcode.png"/>
+					<br/> -->
 						<br/>
+						<div class="mui-btn mui-btn-danger mui-btn-block" onclick="startScan(<?=$v->code?>)" >扫一扫</div>
 						<br/>
-						<div class="mui-btn mui-btn-danger mui-btn-block" onclick="startScan(<?= $v->code?>)">扫一扫</div>
-						<br/>
-						<ul id="barcode-history<?= $v->code?>" class="dlist" style="text-align:left;">
+						<ul id="barcode-history<?=$v->code?>" class="dlist mui-table-view" style="text-align:left;" type="<?=$v->type?>" task_guid="<?= $v->task_guid?>" question_guid="<?= $v->question_guid?>"  code="<?= $v->code?>">
 							<li id="nohistory" class="ditem" onclick="onempty();">	</li>
+							
 						</ul>
+						
+						<ul class="mui-table-view mui-grid-view mui-grid-9">
+						    <p class="bold">请上传查询结果截图</p>
+        				    <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-4 image-list-container">
+											
+        					<div class="row image-list" onclick="takePic(this)"   type="<?= $v->type?>"  task_guid="<?= $v->task_guid?>" question_guid="<?= $v->question_guid?>"  code="<?= $v->code?>"  >
+        					<div class="image-item space">
+        					<div class="image-close" >X</div>
+        					</div>
+        				     </div>
+        				     </li>
+        				 </ul>
+        				 <ul class="mui-table-view mui-grid-view mui-grid-9">
+						    <p class="bold">请拍照</p>
+        				    <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-4 image-list-container">
+											
+        					<div class="row image-list" onclick="takePic(this)"   type="<?= $v->type?>"  task_guid="<?= $v->task_guid?>" question_guid="<?= $v->question_guid?>"  code="<?= $v->code?>"  >
+        					<div class="image-item space">
+        					<div class="image-close" >X</div>
+        					</div>
+        				     </div>
+        				     </li>
+        				 </ul>
 						<br/>
 						
 					</div>
