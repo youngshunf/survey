@@ -7,6 +7,22 @@ use common\models\CommonUtil;
 .mui-ios .action-container{
 		position: relative;
 		}
+.barcode-img{
+/* 	display:inline-block; */
+	width:70px;
+	height:70px;
+	border-radius:5px;
+}
+.img-upload{
+/* 	display:inline-block; */
+	width:70px;
+	height:70px;
+	border:1px solid #f5f5f5;
+	border-radius:5px;
+}
+.img-upload .mui-icon{
+	font-size:30px
+}
 </style>
     <div class="hide question_name" name="<?= $task->name?>" task_guid="<?= $task->task_guid?>" answer_guid="<?= $answer->answer_guid ?>" offline_save="<?=$answer->offline_save?>"></div>
     <?php if(empty($question)){?>
@@ -291,6 +307,20 @@ use common\models\CommonUtil;
 						<br/>
 						<ul id="barcode-history<?= $v->code?>" class="dlist mui-table-view" style="text-align:left;">
 							<li id="nohistory" class="ditem" onclick="onempty();">	</li>
+						</ul>
+						<ul id="barcodeQuestion<?= $v->code?>" class="dlist mui-table-view" style="text-align:left;">
+							<li class="mui-table-view-cell">
+							<p>1、请输入地址:</p>	
+							<input class="mui-input form-control baraddr" type="text" >
+							</li>
+							<li class="mui-table-view-cell">
+							<p>2、请上传查询结果照片并拍摄店内照片:</p>	
+							<div class="barcode-img-container row">
+							<div class="col-xs-3 img-upload">
+							<span class="mui-icon mui-icon-plus" > </span>
+							</div>
+							</div>
+							</li>
 						</ul>
 						<br/>
 						
