@@ -608,7 +608,7 @@ class TaskController extends Controller
                 $answerDetail->answer_time=substr($answer_time, 0,$len-3);
             }
             $answerDetail->answer_address=@$v['answer_address']['address'];
-            $answerDetail->code=$v['code'];
+            $answerDetail->code=@$v['code'];
             if($type==0){//单选题
                 $answerDetail->answer=$v['answer'];
                 $answerDetail->open_answer=@$v['open_answer'];
@@ -631,6 +631,13 @@ class TaskController extends Controller
                     $answerDetail->photo=$photo['photo'];
                     $answerDetail->answer=$v['imageIndex'];
                 } 
+            }elseif($type==5){
+                $a=[
+                    'qrcode'=>@$v['qrcode'],
+                    'result'=>json_encode(@$v['result'])
+                ];
+               
+                $answerDetail->answer=json_encode($a,JSON_UNESCAPED_UNICODE);
             }
            
             $answerDetail->save();                      

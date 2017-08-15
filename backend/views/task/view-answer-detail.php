@@ -75,11 +75,50 @@ p{
 				    <p>未作答</p>
 				    <?php }?>
 				
-				<?php }elseif ($v['type']==2 || $v['type']==4 ||  $v['type']==6 ||$v['type']==7){
+				<?php }elseif ($v['type']==2 || $v['type']==4 ||$v['type']==5 ||  $v['type']==6 ||$v['type']==7){
 				    $answerArr=AnswerDetail::findOne(['answer_guid'=>$model->answer_guid, 'question_guid'=>$v['question_guid'],'user_guid'=>$model->user_guid]);
 				    ?>
 				   <?php  if ($v['type']==4){?>
 				<p>答案: <a href="<?= yii::getAlias('@photo').'/'.$answerArr['path'].$answerArr['photo']?>">下载</a></p>
+				<?php }elseif($v['type']==5){
+				    $a=json_decode(@$answerArr['answer'],true);
+				?>
+				<p>扫码结果: <?= @$a['qrcode']?></p>
+				<?php 
+				    $result=@$a['result'];
+				    if(is_string($result)){
+				         $result=json_decode($result,true);
+				    }
+				    ?>
+				    <ul class="mui-table-view">
+				    <li class="mui-table-view-cell">查询结果:</li>
+				    <?php if($result['code']==0){
+				    $codeInfo=@$result['data']['codeInfo'];
+				    $flowList=@$result['data']['flowList'];
+				        ?>
+				    <li class="mui-table-view-cell">商品信息:</li>
+				    <li class="mui-table-view-cell">
+				     <p>产品代码:<?= @$a['qrcode']?></p>
+				     <p>上级编码:<?= @$codeInfo['parentCode']?></p>
+				     <p>产品名称:<?= @$codeInfo['materialShortName']?></p>
+				     <p>生产批次:<?= @$codeInfo['batchCode']?></p>
+				     <p>生产日期:<?= @$codeInfo['packDate']?></p>
+				    </li>
+				     <li class="mui-table-view-cell">流向信息:</li>
+				    <?php if(!empty($flowList) && is_array($flowList)){
+				    
+				        foreach ($flowList as $v){?>
+				    <li class="mui-table-view-cell">
+				     <p>发货方:<?= @$v['srcName']?></p>
+				     <p>收货方:<?= @$v['destName']?></p>
+				     <p>流向日期:<?= @$v['operateTime']?></p>
+				     <p>流向类型:<?= @$v['billTypeName']?></p>
+				    </li>
+				    <?php }}?>
+				    <?php }else{?>
+				      <li class="mui-table-view-cell"><?= $result['errMsg']?></li>
+				    <?php }?>
+				    </ul>
 				<?php }else{?>
 				<p>答案: <?= @$answerArr['answer']?></p>
 				<?php }?>

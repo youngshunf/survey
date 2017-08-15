@@ -38,7 +38,7 @@ class AnswerDetail extends \yii\db\ActiveRecord
         return [
             [['answer_guid', 'task_guid', 'question_guid', 'user_guid'], 'string'],
             [['code', 'type', 'created_at', 'updated_at'], 'integer'],
-            [['answer'], 'string', 'max' => 255],
+            [['answer'], 'string'],
             [['path', 'photo'], 'string', 'max' => 128]
         ];
     }
