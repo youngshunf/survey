@@ -102,31 +102,35 @@ class TaskController extends Controller
         $str1=explode('省', $address);
         $province='';
         $city='';
+        $addr='';
         if(count($str1)==2){
-            $province=$str1[0];
+            $province=$str1[0].'省';
             $str2=explode('市', $str1[1]);
             if(count($str2)==2){
-                $city=$str2[0];
+                $city=$str2[0].'市';
+                $addr=$str2[1];
             }
         }else{
             $str1=explode('市', $address);
             if(count($str1)==2){
-                $province=$str1[0];
+                $province=$str1[0].'市';
+                $city=$str1[0].'市';
                 $str2=explode('区', $str1[1]);
                 if(count($str2)==2){
-                    $city=$str2[0];
+                    $addr=$str2[1];
                 }
+                $address=$province.$city.$addr;
             }
         }
 //         $code='00581708300000737243';
         $data=[
             'code'=>$code,
             'terminalType'=>$terminalType,
-            'locateAddress'=>@$locIngo['address'],
+            'locateAddress'=>$address,
             'locateProvince'=>$province,
             'locateCity'=>$city,
             'inputAddress'=>$inputAddress,
-            'deviceLocateAddress'=>@$locIngo['address']
+            'deviceLocateAddress'=>$addr
         ];
         //         $res=$this->post($url,$data);
         $res=CommonUtil::vpost($url,$data);

@@ -325,13 +325,13 @@ background: none;
 						</ul>
 						<ul id="barcodeQuestion<?= $v->code?>" class="dlist mui-table-view " style="text-align:left;" type="<?=$v->type?>" task_guid="<?= $v->task_guid?>" question_guid="<?= $v->question_guid?>"  code="<?= $v->code?>">
 							<li class="mui-table-view-cell">
-							<p>a、请输入地址<?php if($v->required==1){?>
+							<p>a、请输入店名和地址<?php if($v->required==1){?>
         				<span class="red">*</span>
         				<?php }?>: </p>	
 							<input class="mui-input form-control baraddr" type="text" >
 							</li>
 							<li class="mui-table-view-cell">
-							<p>b、请上传查询结果截图并拍摄店内照片 <?php if($v->required==1){?>
+							<p>b、请上传门店照片和查询结果截图 <?php if($v->required==1){?>
         				<span class="red">*</span>
         				<?php }?>:</p>	
 							<div class="barcode-img-container row" type="<?=$v->type?>" task_guid="<?= $v->task_guid?>" question_guid="<?= $v->question_guid?>"  code="<?= $v->code?>" >
