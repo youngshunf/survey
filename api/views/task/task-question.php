@@ -317,7 +317,7 @@ background: none;
 						<div class="mui-btn mui-btn-warning mui-btn-block" onclick="startScan(<?= $v->code?>)">扫一扫</div>
 						<div class="input-group">
 						  <input class="mui-input form-control inputcode" type="text" id="inputcode<?= $v->code?>" class="请扫描或输入编码" >
-						   <span class="input-group-addon" ><button class="btn btn-warning search-code">查询</button></span>
+						   <span class="input-group-addon" ><button class="btn btn-warning search-code" code="<?= $v->code?>">查询</button></span>
 						 </div>
 						<br/>
 						<ul id="barcode-history<?= $v->code?>" class="dlist mui-table-view codehistory" style="text-align:left;" type="<?=$v->type?>" task_guid="<?= $v->task_guid?>" question_guid="<?= $v->question_guid?>"  code="<?= $v->code?>">
