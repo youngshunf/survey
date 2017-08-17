@@ -95,40 +95,66 @@ class TaskController extends Controller
            $terminalType= 'IOS';
        }
         $code=@$_POST['data']['code'];
+        $inputAddress=@$_POST['data']['address'];
         $locIngo=@$_POST['data']['locInfo'];
         $address=@$locIngo['address'];
+        $address=str_replace('中国', '', $address);
         $str1=explode('省', $address);
         $province='';
         $city='';
+        $addr='';
         if(count($str1)==2){
-            $province=$str1[0];
+            $province=$str1[0].'省';
             $str2=explode('市', $str1[1]);
             if(count($str2)==2){
-                $city=$str2[0];
+                $city=$str2[0].'市';
+                $addr=$str2[1];
             }
         }else{
             $str1=explode('市', $address);
             if(count($str1)==2){
-                $province=$str1[0];
+                $province=$str1[0].'市';
+                $city=$str1[0].'市';
                 $str2=explode('区', $str1[1]);
                 if(count($str2)==2){
-                    $city=$str2[0];
+                    $addr=$str2[1];
                 }
+                $address=$province.$city.$addr;
             }
         }
-        $code='00581708300000737243';
+//         $code='00581708300000737243';
         $data=[
             'code'=>$code,
             'terminalType'=>$terminalType,
-            'locateAddress'=>@$locIngo['address'],
+            'locateAddress'=>$address,
             'locateProvince'=>$province,
             'locateCity'=>$city,
-            'inputAddress'=>@$locIngo['address'],
-            'deviceLocateAddress'=>@$locIngo['address']
+            'inputAddress'=>$inputAddress,
+            'deviceLocateAddress'=>$addr
         ];
         //         $res=$this->post($url,$data);
         $res=CommonUtil::vpost($url,$data);
         return CommonUtil::success($res);
+    }
+    
+    protected function  queryImg($result,$img){
+    
+        $url="https://qr.huggies.com.cn:8066/api/proj/openapi/flow/setrecordimg";
+        $ua=yii::$app->request->getUserAgent();
+        if(empty($result)){
+            return false;
+        }
+        if(!empty($result) && $result['code']!=0){
+            return false;
+        }
+        $recordId=$result['data']['codeFlowQueryRecordId'];
+        $data=[
+            'recordId'=>$recordId,
+            'imgPath'=>$img,
+        ];
+        //         $res=$this->post($url,$data);
+        $res=CommonUtil::vpost($url,$data);
+        return $res;
     }
         
     /**
@@ -608,7 +634,7 @@ class TaskController extends Controller
                 $answerDetail->answer_time=substr($answer_time, 0,$len-3);
             }
             $answerDetail->answer_address=@$v['answer_address']['address'];
-            $answerDetail->code=$v['code'];
+            $answerDetail->code=@$v['code'];
             if($type==0){//单选题
                 $answerDetail->answer=$v['answer'];
                 $answerDetail->open_answer=@$v['open_answer'];
@@ -631,6 +657,34 @@ class TaskController extends Controller
                     $answerDetail->photo=$photo['photo'];
                     $answerDetail->answer=$v['imageIndex'];
                 } 
+            }elseif($type==5){
+                $imgs=[];
+                $images=@$v['imgs'];
+                $waterMaskStr= $answerDetail->answer_address;
+                if(empty($waterMaskStr)){
+                    $waterMaskStr=@$locInfo['address'];
+                }
+                if(empty($answerDetail->answer_time)){
+                    $answerDetail->answer_time=time();
+                }
+                if(!empty($images)){
+                    foreach ($images as $n){
+                        $photo=ImageUploader::uploadImageByBase64($n['imgData'], $n['imgLen'],$waterMaskStr,$answerDetail->answer_time);
+                        if($photo){
+                            $imgs[]=$photo['path'].$photo['photo'];
+                            $this->queryImg(@$v['result'], yii::$app->params['photoUrl'].$photo['path'].$photo['photo']);
+                        }
+                    }
+                }
+                
+                $a=[
+                    'qrcode'=>@$v['qrcode'],
+                    'result'=>@$v['result'],
+                    'inputAddress'=>@$v['inputAddress'],
+                    'imgs'=>$imgs
+                ];
+               
+                $answerDetail->answer=json_encode($a,JSON_UNESCAPED_UNICODE);
             }
            
             $answerDetail->save();                      

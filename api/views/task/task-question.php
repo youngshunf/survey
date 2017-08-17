@@ -8,6 +8,9 @@ use common\models\CommonUtil;
 		position: relative;
 		}
 .barcode-img{
+		margin:10px;	
+		}
+.barcode-img,.barcode-img img{
 /* 	display:inline-block; */
 	width:70px;
 	height:70px;
@@ -17,11 +20,19 @@ use common\models\CommonUtil;
 /* 	display:inline-block; */
 	width:70px;
 	height:70px;
-	border:1px solid #f5f5f5;
+	border:1px solid #f0f0f0;
 	border-radius:5px;
+	text-align: center;
+   line-height: 70px;
+	margin:10px;
 }
 .img-upload .mui-icon{
-	font-size:30px
+	font-size:30px;
+	color:#f0f0f0;
+}
+.input-group-addon{
+	border: none;
+background: none;
 }
 </style>
     <div class="hide question_name" name="<?= $task->name?>" task_guid="<?= $task->task_guid?>" answer_guid="<?= $answer->answer_guid ?>" offline_save="<?=$answer->offline_save?>"></div>
@@ -303,21 +314,30 @@ use common\models\CommonUtil;
         				<div>
         					
         				<div id="dcontent" class="dcontent mui-center">
-						<div class="mui-btn mui-btn-danger mui-btn-block" onclick="startScan(<?= $v->code?>)">扫一扫</div>
+						<div class="mui-btn mui-btn-warning mui-btn-block" onclick="startScan(<?= $v->code?>)">扫一扫</div>
+						<div class="input-group">
+						  <input class="mui-input form-control inputcode" type="text" id="inputcode<?= $v->code?>" class="请扫描或输入编码" >
+						   <span class="input-group-addon" ><button class="btn btn-warning search-code">查询</button></span>
+						 </div>
 						<br/>
-						<ul id="barcode-history<?= $v->code?>" class="dlist mui-table-view" style="text-align:left;">
+						<ul id="barcode-history<?= $v->code?>" class="dlist mui-table-view codehistory" style="text-align:left;" type="<?=$v->type?>" task_guid="<?= $v->task_guid?>" question_guid="<?= $v->question_guid?>"  code="<?= $v->code?>">
 							<li id="nohistory" class="ditem" onclick="onempty();">	</li>
 						</ul>
-						<ul id="barcodeQuestion<?= $v->code?>" class="dlist mui-table-view" style="text-align:left;">
+						<ul id="barcodeQuestion<?= $v->code?>" class="dlist mui-table-view " style="text-align:left;" type="<?=$v->type?>" task_guid="<?= $v->task_guid?>" question_guid="<?= $v->question_guid?>"  code="<?= $v->code?>">
 							<li class="mui-table-view-cell">
-							<p>1、请输入地址:</p>	
+							<p>a、请输入店名和地址<?php if($v->required==1){?>
+        				<span class="red">*</span>
+        				<?php }?>: </p>	
 							<input class="mui-input form-control baraddr" type="text" >
 							</li>
 							<li class="mui-table-view-cell">
-							<p>2、请上传查询结果照片并拍摄店内照片:</p>	
-							<div class="barcode-img-container row">
-							<div class="col-xs-3 img-upload">
-							<span class="mui-icon mui-icon-plus" > </span>
+							<p>b、请上传门店照片和查询结果截图 <?php if($v->required==1){?>
+        				<span class="red">*</span>
+        				<?php }?>:</p>	
+							<div class="barcode-img-container row" type="<?=$v->type?>" task_guid="<?= $v->task_guid?>" question_guid="<?= $v->question_guid?>"  code="<?= $v->code?>" >
+							
+							<div class="col-xs-3 img-upload"  type="<?=$v->type?>" task_guid="<?= $v->task_guid?>" question_guid="<?= $v->question_guid?>"  code="<?= $v->code?>" >
+							<span class="mui-icon mui-icon-plusempty" > </span>
 							</div>
 							</div>
 							</li>
