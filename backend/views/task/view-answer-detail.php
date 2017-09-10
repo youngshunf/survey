@@ -83,8 +83,53 @@ p{
 				<?php }elseif($v['type']==5){
 				    $a=json_decode(@$answerArr['answer'],true);
 				?>
+				<h5>扫码记录</h5>
+				<?php if(!empty($answerArr['open_answer'])){
+				    $arr=json_decode(@$answerArr['open_answer'],true);
+				    foreach ($arr as $k=>$qr){?>
+				    <h6>第<?= $k+1?>次</h6>
+				    <p>扫码结果: <?= @$qr['qrcode']?></p>
+				    <p>输入地址: <?= @$qr['inputAddress']?></p>
+				    <p>终端类型: <?= @$qr['terminalType']?></p>
+				    <?php 
+				    $result=@$qr['result'];
+				    if(is_string($result)){
+				         $result=json_decode($result,true);
+				    }
+				    ?>
+				    <ul class="mui-table-view">
+				    <?php if($result['code']==0){
+				    $codeInfo=@$result['data']['codeInfo'];
+				    $flowList=@$result['data']['flowList'];
+				        ?>
+				    <li class="mui-table-view-cell">商品信息
+				     <p>产品代码:<?= @$qr['qrcode']?></p>
+				     <p>上级编码:<?= @$codeInfo['parentCode']?></p>
+				     <p>产品名称:<?= @$codeInfo['materialShortName']?></p>
+				     <p>生产批次:<?= @$codeInfo['batchCode']?></p>
+				     <p>生产日期:<?= @$codeInfo['packDate']?></p>
+				    </li>
+				    
+				     <li class="mui-table-view-cell">流向信息
+				    <?php if(!empty($flowList) && is_array($flowList)){
+				    
+				        foreach ($flowList as $v){?>
+				     <p>发货方:<?= @$v['srcName']?></p>
+				     <p>收货方:<?= @$v['destName']?></p>
+				     <p>流向日期:<?= @$v['operateTime']?></p>
+				     <p>流向类型:<?= @$v['billTypeName']?></p>
+				    <?php }}?>
+				    </li>
+				    
+				    <?php }else{?>
+				      <li class="mui-table-view-cell"><?= $result['errMsg']?></li>
+				    <?php }?>
+				    </ul>
 				
+				<?php }}?>
+				<h5>提交结果</h5>
 				<p>扫码结果: <?= @$a['qrcode']?></p>
+				<p>终端类型: <?= @$a['terminalType']?></p>
 				<?php 
 				    $result=@$a['result'];
 				    $imgs=@$a['imgs'];

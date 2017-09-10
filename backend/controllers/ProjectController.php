@@ -669,6 +669,42 @@ class ProjectController extends Controller
                 }elseif ($v->type==5){
                         $answerDetail=AnswerDetail::findOne(['answer_guid'=>$item['answer_guid'],'task_guid'=>$im->task_guid,'question_guid'=>$v['question_guid'],'user_guid'=>$item['user_guid']]);
                     if(!empty($answerDetail)){
+                        $r="";
+                        $arr=$answerDetail->open_answer;
+                        if(!empty($arr)){
+                            $arr=json_decode($arr,true);
+                            $r.="扫码记录:\n";
+                            foreach ($arr as $k=>$a){
+                                $result=@$a['result'];
+                                if(is_string($result)){
+                                    $result=json_decode($result,true);
+                                }
+                                $r.="第".($k+1)."次\n";
+                                $r.="扫码结果:".$a["qrcode"].";\n".
+                                    "输入地址:".$a["inputAddress"].";\n";
+                                if($result['code']==0){
+                                    $codeInfo=@$result['data']['codeInfo'];
+                                    $flowList=@$result['data']['flowList'];
+                                    $r .="商品信息:;\n".
+                                        "产品代码:". @$a["qrcode"].";\n".
+                                        "上级编码:". @$codeInfo['parentCode'].";\n".
+                                        "产品名称:". @$codeInfo['materialShortName'].";\n".
+                                        "生产批次:". @$codeInfo['batchCode'].";\n".
+                                        "生产日期:". @$codeInfo['packDate'].";\n";
+                                    if(!empty($flowList) && is_array($flowList)){
+                                        $r .='流向信息:\n';
+                                        foreach ($flowList as $v){
+                                            $r .="发货方:". @$v['srcName'].";\n".
+                                                "收货方:". @$v['destName'].";\n".
+                                                "流向日期:". @$v['operateTime'].";\n".
+                                                "流向类型:". @$v['billTypeName'].";\n";
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    
+                    
                         $a=$answerDetail->answer;
                         $a=json_decode($a,true);
                         $result=@$a['result'];
@@ -679,33 +715,35 @@ class ProjectController extends Controller
                         if(is_string($result)){
                             $result=json_decode($result,true);
                         }
-                        $r='扫码结果:'.$a['qrcode'].';'.
-                           '输入地址'.$a['inputAddress'].';';
-                         if($result['code']==0){
-				            $codeInfo=@$result['data']['codeInfo'];
-				            $flowList=@$result['data']['flowList'];
-				            $r .='商品信息:;'.
-            				     '产品代码:'. @$a['qrcode'].';'.
-            				     '上级编码:'. @$codeInfo['parentCode'].';'.
-            				     '产品名称:'. @$codeInfo['materialShortName'].';'.
-            				     '生产批次:'. @$codeInfo['batchCode'].';'.
-            				     '生产日期:'. @$codeInfo['packDate'].';';
-				            if(!empty($flowList) && is_array($flowList)){
-				            
-				                foreach ($flowList as $v){
-				                  $r .='发货方:'. @$v['srcName'].';'.
-                				    '收货方:'. @$v['destName'].';'.
-                				     '流向日期:'. @$v['operateTime'].';'.
-                				     '流向类型:'. @$v['billTypeName'].';'; 
-				                }
-				                }
-                         }
-                         if(!empty($imgs)){
-                         	foreach ($imgs as $k=> $n){
-                         	    $r .='图片地址'.($k+1).':'.yii::$app->params['photoUrl'].$n;
-                         	}
-                         }
-                        $resultExcel->getActiveSheet()->setCellValue((string)$col.(string)$i,$result);
+                        $r.="提交结果:\n";
+                        $r.="扫码结果:".$a["qrcode"].";\n".
+                            "输入地址:".$a["inputAddress"].";\n";
+                        if($result['code']==0){
+                            $codeInfo=@$result['data']['codeInfo'];
+                            $flowList=@$result['data']['flowList'];
+                            $r .="商品信息:;\n".
+                                "产品代码:". @$a["qrcode"].";\n".
+                                "上级编码:". @$codeInfo['parentCode'].";\n".
+                                "产品名称:". @$codeInfo['materialShortName'].";\n".
+                                "生产批次:". @$codeInfo['batchCode'].";\n".
+                                "生产日期:". @$codeInfo['packDate'].";\n";
+                            if(!empty($flowList) && is_array($flowList)){
+                                $r .='流向信息:\n';
+                                foreach ($flowList as $v){
+                                    $r .="发货方:". @$v['srcName'].";\n".
+                                        "收货方:". @$v['destName'].";\n".
+                                        "流向日期:". @$v['operateTime'].";\n".
+                                        "流向类型:". @$v['billTypeName'].";\n";
+                                }
+                            }
+                        }
+                        if(!empty($imgs)){
+                            foreach ($imgs as $k=> $n){
+                                $r .="图片地址".($k+1).":".yii::$app->params['photoUrl'].$n."\n";
+                            }
+                        }
+                        $resultExcel->getActiveSheet()->setCellValue((string)$col.(string)$i,$r);
+                        $resultExcel->getActiveSheet()->getStyle((string)$col.(string)$i)->getAlignment()->setWrapText(true);
                     }
                 }
                
@@ -902,7 +940,43 @@ class ProjectController extends Controller
                     }
                     }elseif ($v->type==5){
                         $answerDetail=AnswerDetail::findOne(['answer_guid'=>$item['answer_guid'],'task_guid'=>$im->task_guid,'question_guid'=>$v['question_guid'],'user_guid'=>$item['user_guid']]);
-                    if(!empty($answerDetail)){
+                     if(!empty($answerDetail)){
+                        $r="";
+                        $arr=$answerDetail->open_answer;
+                        if(!empty($arr)){
+                            $arr=json_decode($arr,true);
+                            $r.="扫码记录:\n";
+                            foreach ($arr as $k=>$a){
+                                $result=@$a['result'];
+                                if(is_string($result)){
+                                    $result=json_decode($result,true);
+                                }
+                                $r.="第".($k+1)."次\n";
+                                $r.="扫码结果:".$a["qrcode"].";\n".
+                                    "输入地址:".$a["inputAddress"].";\n";
+                                if($result['code']==0){
+                                    $codeInfo=@$result['data']['codeInfo'];
+                                    $flowList=@$result['data']['flowList'];
+                                    $r .="商品信息:;\n".
+                                        "产品代码:". @$a["qrcode"].";\n".
+                                        "上级编码:". @$codeInfo['parentCode'].";\n".
+                                        "产品名称:". @$codeInfo['materialShortName'].";\n".
+                                        "生产批次:". @$codeInfo['batchCode'].";\n".
+                                        "生产日期:". @$codeInfo['packDate'].";\n";
+                                    if(!empty($flowList) && is_array($flowList)){
+                                        $r .='流向信息:\n';
+                                        foreach ($flowList as $v){
+                                            $r .="发货方:". @$v['srcName'].";\n".
+                                                "收货方:". @$v['destName'].";\n".
+                                                "流向日期:". @$v['operateTime'].";\n".
+                                                "流向类型:". @$v['billTypeName'].";\n";
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    
+                    
                         $a=$answerDetail->answer;
                         $a=json_decode($a,true);
                         $result=@$a['result'];
@@ -913,33 +987,35 @@ class ProjectController extends Controller
                         if(is_string($result)){
                             $result=json_decode($result,true);
                         }
-                        $r='扫码结果:'.$a['qrcode'].';'.
-                           '输入地址'.$a['inputAddress'].';';
-                         if($result['code']==0){
-				            $codeInfo=@$result['data']['codeInfo'];
-				            $flowList=@$result['data']['flowList'];
-				            $r .='商品信息:;'.
-            				     '产品代码:'. @$a['qrcode'].';'.
-            				     '上级编码:'. @$codeInfo['parentCode'].';'.
-            				     '产品名称:'. @$codeInfo['materialShortName'].';'.
-            				     '生产批次:'. @$codeInfo['batchCode'].';'.
-            				     '生产日期:'. @$codeInfo['packDate'].';';
-				            if(!empty($flowList) && is_array($flowList)){
-				            
-				                foreach ($flowList as $v){
-				                  $r .='发货方:'. @$v['srcName'].';'.
-                				    '收货方:'. @$v['destName'].';'.
-                				     '流向日期:'. @$v['operateTime'].';'.
-                				     '流向类型:'. @$v['billTypeName'].';'; 
-				                }
-				                }
-                         }
-                         if(!empty($imgs)){
-                         	foreach ($imgs as $k=> $n){
-                         	    $r .='图片地址'.($k+1).':'.yii::$app->params['photoUrl'].$n;
-                         	}
-                         }
+                        $r.="提交结果:\n";
+                        $r.="扫码结果:".$a["qrcode"].";\n".
+                            "输入地址:".$a["inputAddress"].";\n";
+                        if($result['code']==0){
+                            $codeInfo=@$result['data']['codeInfo'];
+                            $flowList=@$result['data']['flowList'];
+                            $r .="商品信息:;\n".
+                                "产品代码:". @$a["qrcode"].";\n".
+                                "上级编码:". @$codeInfo['parentCode'].";\n".
+                                "产品名称:". @$codeInfo['materialShortName'].";\n".
+                                "生产批次:". @$codeInfo['batchCode'].";\n".
+                                "生产日期:". @$codeInfo['packDate'].";\n";
+                            if(!empty($flowList) && is_array($flowList)){
+                                $r .='流向信息:\n';
+                                foreach ($flowList as $v){
+                                    $r .="发货方:". @$v['srcName'].";\n".
+                                        "收货方:". @$v['destName'].";\n".
+                                        "流向日期:". @$v['operateTime'].";\n".
+                                        "流向类型:". @$v['billTypeName'].";\n";
+                                }
+                            }
+                        }
+                        if(!empty($imgs)){
+                            foreach ($imgs as $k=> $n){
+                                $r .="图片地址".($k+1).":".yii::$app->params['photoUrl'].$n."\n";
+                            }
+                        }
                         $resultExcel->getActiveSheet()->setCellValue((string)$col.(string)$i,$r);
+                        $resultExcel->getActiveSheet()->getStyle((string)$col.(string)$i)->getAlignment()->setWrapText(true);
                     }
                 }
                      

@@ -300,7 +300,7 @@ background: none;
             					<?php }?>
             				</div>
                 </div>
-                <?php }elseif($v->type==5){?>
+                <?php }elseif($v->type==5 || $v->type==8){?>
                  <div class="task-slide  <?php if($v->required==1) echo 'required'?> <?= $k==0?'':'hide'?>"    id="q<?= $v->code?>" type="<?=$v->type?>" task_guid="<?= $v->task_guid?>" question_guid="<?= $v->question_guid?>"  code="<?= $v->code?>">
                           <ul class="mui-table-view ">
         				<li class="mui-table-view-cell">
@@ -315,10 +315,14 @@ background: none;
         					
         				<div id="dcontent" class="dcontent mui-center">
 						<div class="mui-btn mui-btn-warning mui-btn-block" onclick="startScan(<?= $v->code?>)">扫一扫</div>
+						<?php if($v->type==8){?>
+						 <input class="mui-input form-control inputcode" readonly="readonly" type="text" id="inputcode<?= $v->code?>" class="请扫描二维码" >
+						<?php }else{?>
 						<div class="input-group">
 						  <input class="mui-input form-control inputcode" type="text" id="inputcode<?= $v->code?>" class="请扫描或输入编码" >
 						   <span class="input-group-addon" ><button class="btn btn-warning search-code" code="<?= $v->code?>">查询</button></span>
 						 </div>
+						 
 						<br/>
 						<ul id="barcode-history<?= $v->code?>" class="dlist mui-table-view codehistory" style="text-align:left;" type="<?=$v->type?>" task_guid="<?= $v->task_guid?>" question_guid="<?= $v->question_guid?>"  code="<?= $v->code?>">
 							<li id="nohistory" class="ditem" onclick="onempty();">	</li>
@@ -343,6 +347,7 @@ background: none;
 							</li>
 						</ul>
 						<br/>
+						<?php }?>
 						
 					</div>
         					</div>

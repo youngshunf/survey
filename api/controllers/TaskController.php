@@ -86,7 +86,13 @@ class TaskController extends Controller
     }
     
     public function  actionQueryCode(){
-        
+        $clientUser=$_POST['user'];
+        //验证用户
+        $user=User::find()->andWhere(['user_guid'=>$clientUser['user_guid'],'access_token'=>$clientUser['access_token']])->one();
+         
+        if(empty($user)){
+            return CommonUtil::error('e1006');
+        }
         $url="https://qr.huggies.com.cn:8066/api/proj/openapi/flow/codeflow";
        $ua=yii::$app->request->getUserAgent();
        if(strstr($ua, 'Android')){
@@ -96,8 +102,9 @@ class TaskController extends Controller
        }
         $code=@$_POST['data']['code'];
         $inputAddress=@$_POST['data']['address'];
-        $locIngo=@$_POST['data']['locInfo'];
-        $address=@$locIngo['address'];
+        $locInfo=@$_POST['data']['locInfo'];
+        $postData=@$_POST['data'];
+        $address=@$locInfo['address'];
         $address=str_replace('中国', '', $address);
         $str1=explode('省', $address);
         $province='';
@@ -122,7 +129,7 @@ class TaskController extends Controller
                 $address=$province.$city.$addr;
             }
         }
-//         $code='00581708300000737243';
+//          $code='00581708300000737243';
         $data=[
             'code'=>$code,
             'terminalType'=>$terminalType,
@@ -134,6 +141,43 @@ class TaskController extends Controller
         ];
         //         $res=$this->post($url,$data);
         $res=CommonUtil::vpost($url,$data);
+        $answerDetail=AnswerDetail::findOne(['answer_guid'=>@$postData['answer_guid'],'task_guid'=>$postData['task_guid'],'user_guid'=>$user->user_guid,'question_guid'=>$postData['question_guid']]);
+        $answer_guid=@$postData['answer_guid'];
+        $task_guid=@$postData['task_guid'];
+        $question_guid=@$postData['question_guid'];
+        if(empty($answerDetail)){
+                $answerDetail=new AnswerDetail();
+                $answerDetail->created_at=time();
+            }else{
+                $answerDetail->updated_at=time();
+            }
+            $answer=Answer::findOne(['answer_guid'=>$answer_guid,'task_guid'=>$task_guid,'user_guid'=>$user->user_guid]);
+    
+            if(empty($answer)){
+                return CommonUtil::error('e1002');
+            }
+    
+            $answerDetail->answer_guid=$answer_guid;
+            $answerDetail->task_guid=$task_guid;
+            $answerDetail->user_guid=$user->user_guid;
+            $answerDetail->question_guid=$question_guid;
+            $answerDetail->type=5;
+            $answerDetail->answer_address=@$locInfo['address'];
+            $answerDetail->answer_time=time();
+            $a=[
+                'qrcode'=>$code,
+                'result'=>$res,
+                'inputAddress'=>$inputAddress,
+                'terminalType'=>$terminalType
+            ];
+            $answerArr=[];
+            if(!empty($answerDetail->open_answer)){
+                $answerArr=json_decode($answerDetail->open_answer,true);
+            }
+            $answerArr[]=$a;
+            $answerDetail->open_answer=json_encode($answerArr,JSON_UNESCAPED_UNICODE);
+            $answerDetail->save();
+        
         return CommonUtil::success($res);
     }
     
@@ -676,11 +720,17 @@ class TaskController extends Controller
                         }
                     }
                 }
-                
+                $ua=yii::$app->request->getUserAgent();
+                if(strstr($ua, 'Android')){
+                    $terminalType= 'ANDROID';
+                }else{
+                    $terminalType= 'IOS';
+                }
                 $a=[
                     'qrcode'=>@$v['qrcode'],
                     'result'=>@$v['result'],
                     'inputAddress'=>@$v['inputAddress'],
+                    'terminalType'=>$terminalType,
                     'imgs'=>$imgs
                 ];
                
