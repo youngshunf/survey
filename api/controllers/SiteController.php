@@ -341,7 +341,7 @@ class SiteController extends Controller
 //        }
        $wgtUrl= 'http://images.suoxinmr.com/wgt/H55174E5A.wgt';
       $updateInfo=[
-          'newVer'=>'1.4.1',
+          'newVer'=>'1.4.4',
           'wgtUrl'=>$wgtUrl
       ];
       

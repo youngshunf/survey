@@ -545,10 +545,10 @@ function check(){
 		        return false;
 		    }
 	 }else if(type==5){
-		 if(!$('#qrcode-value').val()){
-			    modalMsg("请填写二维码验证值");
-		        return false;
-		    }
+// 		 if(!$('#qrcode-value').val()){
+// 			    modalMsg("请填写二维码验证值");
+// 		        return false;
+// 		    }
 	 }else if(type==7){
 		if(!$('input[name=minnum]').val()||!$('input[name=maxnum]').val()){
 			modalMsg("请填写最大值和最小值");
