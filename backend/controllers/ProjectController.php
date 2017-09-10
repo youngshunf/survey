@@ -146,7 +146,7 @@ class ProjectController extends Controller
         $doneRate=$total==0?0:round($countDone/$total*100,2);
         $searchModel = new SearchTask();
         $searchModel->project_id=$model->id;
-//         $searchModel->post_type=1;
+        $searchModel->post_type=1;
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $task=Task::findOne(['project_id'=>$model->id]);
         $questionDataProvider=new ActiveDataProvider([
@@ -212,8 +212,6 @@ class ProjectController extends Controller
      */
     public function actionCreate()
     {
-      
-     
         $model = new ProjectForm();
         $model->setScenario('create');
 
@@ -221,12 +219,6 @@ class ProjectController extends Controller
             $id=$model->createProject();
             if($id){
                 return $this->redirect(['view', 'id' => $id]);
-            }else{
-                $group=Group::find()->andWhere(['create_by'=>yii::$app->user->identity->user_guid])->all();
-                return $this->render('create', [
-                    'model' => $model,
-                    'group'=>$group
-                ]);
             }
         } 
         
@@ -666,47 +658,6 @@ class ProjectController extends Controller
                         $resultExcel->getActiveSheet()->getCell($col.$i)->getHyperlink()->setUrl($url);
                         $resultExcel->getActiveSheet()->getStyle($col.$i)->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
                     }
-                }elseif ($v->type==5){
-                        $answerDetail=AnswerDetail::findOne(['answer_guid'=>$item['answer_guid'],'task_guid'=>$im->task_guid,'question_guid'=>$v['question_guid'],'user_guid'=>$item['user_guid']]);
-                    if(!empty($answerDetail)){
-                        $a=$answerDetail->answer;
-                        $a=json_decode($a,true);
-                        $result=@$a['result'];
-                        $imgs=@$a['imgs'];
-                        if(is_string($imgs)){
-                            $imgs=json_decode($imgs,true);
-                        }
-                        if(is_string($result)){
-                            $result=json_decode($result,true);
-                        }
-                        $r='扫码结果:'.$a['qrcode'].';'.
-                           '输入地址'.$a['inputAddress'].';';
-                         if($result['code']==0){
-				            $codeInfo=@$result['data']['codeInfo'];
-				            $flowList=@$result['data']['flowList'];
-				            $r .='商品信息:;'.
-            				     '产品代码:'. @$a['qrcode'].';'.
-            				     '上级编码:'. @$codeInfo['parentCode'].';'.
-            				     '产品名称:'. @$codeInfo['materialShortName'].';'.
-            				     '生产批次:'. @$codeInfo['batchCode'].';'.
-            				     '生产日期:'. @$codeInfo['packDate'].';';
-				            if(!empty($flowList) && is_array($flowList)){
-				            
-				                foreach ($flowList as $v){
-				                  $r .='发货方:'. @$v['srcName'].';'.
-                				    '收货方:'. @$v['destName'].';'.
-                				     '流向日期:'. @$v['operateTime'].';'.
-                				     '流向类型:'. @$v['billTypeName'].';'; 
-				                }
-				                }
-                         }
-                         if(!empty($imgs)){
-                         	foreach ($imgs as $k=> $n){
-                         	    $r .='图片地址'.($k+1).':'.yii::$app->params['photoUrl'].$n;
-                         	}
-                         }
-                        $resultExcel->getActiveSheet()->setCellValue((string)$col.(string)$i,$result);
-                    }
                 }
                
             }
@@ -785,9 +736,9 @@ class ProjectController extends Controller
     //导出问题答案
     public function actionBatchExportExcel($project_id){
         $project=Project::findOne($project_id);
-        $taskArr=Task::find()->andWhere(['project_id'=>$project_id])->all();
+        $taskCount=Task::find()->andWhere(['project_id'=>$project_id])->count();
     
-        if(empty($taskArr)){
+        if($taskCount<=0){
             yii::$app->getSession()->setFlash('error','没有数据哦!');
             return $this->redirect(yii::$app->request->referrer);
         }
@@ -823,10 +774,10 @@ class ProjectController extends Controller
         }
     
         $i=2;
-        foreach ($taskArr as $ky=>$im){
+        foreach (Task::find()->andWhere(['project_id'=>$project_id])->each(10) as $ky=>$im){
             $answerArr=Answer::findAll(['task_guid'=>$im->task_guid]);
             
-            foreach ($answerArr as $key=>$item){
+            foreach (Answer::find()->andWhere(['task_guid'=>$im->task_guid])->each(10) as $key=>$item){
                 $resultExcel->getActiveSheet()->setCellValue('A'.$i,$key+1);
                 $resultExcel->getActiveSheet()->setCellValue('B'.$i,$item['answer_guid']);
                 $resultExcel->getActiveSheet()->setCellValue('C'.$i,$im['name']);
@@ -899,47 +850,6 @@ class ProjectController extends Controller
                         $resultExcel->getActiveSheet()->setCellValue($col.$i,"录音");
                         $resultExcel->getActiveSheet()->getCell($col.$i)->getHyperlink()->setUrl($url);
                         $resultExcel->getActiveSheet()->getStyle($col.$i)->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
-                    }
-                    }elseif ($v->type==5){
-                        $answerDetail=AnswerDetail::findOne(['answer_guid'=>$item['answer_guid'],'task_guid'=>$im->task_guid,'question_guid'=>$v['question_guid'],'user_guid'=>$item['user_guid']]);
-                    if(!empty($answerDetail)){
-                        $a=$answerDetail->answer;
-                        $a=json_decode($a,true);
-                        $result=@$a['result'];
-                        $imgs=@$a['imgs'];
-                        if(is_string($imgs)){
-                            $imgs=json_decode($imgs,true);
-                        }
-                        if(is_string($result)){
-                            $result=json_decode($result,true);
-                        }
-                        $r='扫码结果:'.$a['qrcode'].';'.
-                           '输入地址'.$a['inputAddress'].';';
-                         if($result['code']==0){
-				            $codeInfo=@$result['data']['codeInfo'];
-				            $flowList=@$result['data']['flowList'];
-				            $r .='商品信息:;'.
-            				     '产品代码:'. @$a['qrcode'].';'.
-            				     '上级编码:'. @$codeInfo['parentCode'].';'.
-            				     '产品名称:'. @$codeInfo['materialShortName'].';'.
-            				     '生产批次:'. @$codeInfo['batchCode'].';'.
-            				     '生产日期:'. @$codeInfo['packDate'].';';
-				            if(!empty($flowList) && is_array($flowList)){
-				            
-				                foreach ($flowList as $v){
-				                  $r .='发货方:'. @$v['srcName'].';'.
-                				    '收货方:'. @$v['destName'].';'.
-                				     '流向日期:'. @$v['operateTime'].';'.
-                				     '流向类型:'. @$v['billTypeName'].';'; 
-				                }
-				                }
-                         }
-                         if(!empty($imgs)){
-                         	foreach ($imgs as $k=> $n){
-                         	    $r .='图片地址'.($k+1).':'.yii::$app->params['photoUrl'].$n;
-                         	}
-                         }
-                        $resultExcel->getActiveSheet()->setCellValue((string)$col.(string)$i,$r);
                     }
                 }
                      
