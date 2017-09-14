@@ -213,7 +213,7 @@ background: none;
         				    <?php for($i=0;$i<$v->max_photo;$i++){?>		
         				    <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-4 image-list-container">
 											
-        					<div class="row image-list" onclick="takePic(this)"   type="<?= $v->type?>"  task_guid="<?= $v->task_guid?>" question_guid="<?= $v->question_guid?>"  code="<?= $v->code?>" imgIndex="<?= $i?>" >
+        					<div class="row image-list" onclick="takePic(this)"   type="<?= $v->type?>" photo_type="<?= $v->photo_type ?>" task_guid="<?= $v->task_guid?>" question_guid="<?= $v->question_guid?>"  code="<?= $v->code?>" imgIndex="<?= $i?>" >
         					<div class="image-item space">
         					<div class="image-close" >X</div>
         					</div>

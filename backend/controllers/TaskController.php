@@ -253,6 +253,7 @@ class TaskController extends Controller
                     $question->options=$v->options;
                     $question->qrcode_value=$v->qrcode_value;
                     $question->max_photo=$v->max_photo;
+                    $question->photo_type=$v->photo_type;
                     $question->required=$v->required;
                     $question->created_at=time();
                     $question->project_id=$project_id;
@@ -276,6 +277,7 @@ class TaskController extends Controller
                 $question->options=$v->options;
                 $question->qrcode_value=$v->qrcode_value;
                 $question->max_photo=$v->max_photo;
+                $question->photo_type=$v->photo_type;
                 $question->required=$v->required;
                 $question->created_at=time();
                 $question->save();
@@ -300,7 +302,7 @@ class TaskController extends Controller
         }
         
         $dataProvider=new ActiveDataProvider([
-            'query'=>Answer::find()->andWhere(['task_guid'=>$model->task_guid])->andWhere($where)->orderBy('created_at desc'),
+            'query'=>Answer::find()->andWhere(['task_guid'=>$model->task_guid])->andWhere($where)->orderBy('end_time desc'),
         ]);
         $this->layout="@app/views/layouts/taskanswer_layout.php";
         return $this->render('view-answer', [
@@ -525,6 +527,7 @@ class TaskController extends Controller
                     $question->qrcode_value=$_POST['qrcode-value'];
                 }elseif ($type==3){
                     $question->max_photo=$_POST['imgnum'];
+                    $question->photo_type=@$_POST['phototype'];
                 }
                 
                 $question->created_at=time();
@@ -553,6 +556,7 @@ class TaskController extends Controller
                 $question->qrcode_value=$_POST['qrcode-value'];
             }elseif ($type==3){
                 $question->max_photo=$_POST['imgnum'];
+                $question->photo_type=@$_POST['phototype'];
             }
             
             $question->created_at=time();
@@ -627,6 +631,7 @@ class TaskController extends Controller
                     $question->qrcode_value=@$_POST['qrcode-value'];
                 }elseif ($type==3){
                     $question->max_photo=$_POST['imgnum'];
+                    $question->photo_type=@$_POST['phototype'];
                 }
                 $question->type=$type;
                 $question->updated_at=time();
@@ -684,6 +689,7 @@ class TaskController extends Controller
                         $question->qrcode_value=$_POST['qrcode-value'];
                     }elseif ($type==3){
                         $question->max_photo=$_POST['imgnum'];
+                        $question->photo_type=@$_POST['phototype'];
                     }
                 $question->type=$type;
                 $question->updated_at=time();
@@ -1016,6 +1022,7 @@ class TaskController extends Controller
             $templateQuestion->user_guid=$user_guid;
             $templateQuestion->qrcode_value=$v['qrcode_value'];
             $templateQuestion->max_photo=$v['max_photo'];
+            $templateQuestion->photo_type=$v['photo_type'];
             $templateQuestion->required=$v['required'];
             $templateQuestion->created_at=time();
             if(!$templateQuestion->save()) throw new Exception();
@@ -1064,6 +1071,7 @@ class TaskController extends Controller
                 $templateQuestion->user_guid=$user_guid;
                 $templateQuestion->qrcode_value=$v['qrcode_value'];
                 $templateQuestion->max_photo=$v['max_photo'];
+                $templateQuestion->photo_type=$v['photo_type'];
                 $templateQuestion->required=$v['required'];
                 $templateQuestion->created_at=time();
                 if(!$templateQuestion->save()) throw new Exception('保存问卷失败');

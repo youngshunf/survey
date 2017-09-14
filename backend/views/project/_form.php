@@ -19,7 +19,6 @@ $this->registerJsFile('@web/js/PCASClass.js', ['position'=> View::POS_HEAD]);
     <?php $form = ActiveForm::begin(['id'=>'task-form','options' => ['enctype' => 'multipart/form-data','onsubmit'=>'return check()']]); ?>
     <div class="col-md-12">
     <?= $form->field($model, 'name')->textInput(['maxlength' => 255]) ?>
-    <?= $form->field($model, 'shop')->textInput(['maxlength' => 255]) ?>
     </div>
  
     <div class="col-md-6">

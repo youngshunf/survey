@@ -56,7 +56,7 @@ class ProjectController extends Controller
         $searchModel = new SearchProject();
         $searchModel->user_guid=yii::$app->user->identity->user_guid;
         $user=yii::$app->user->identity;
-        if($user->role_id==87||$user->role_id==86){
+        if($user->role_id==88 || $user->role_id==87||$user->role_id==86){
             $searchModel->user_guid=$user->parent_user;
         }
         

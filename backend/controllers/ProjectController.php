@@ -146,7 +146,7 @@ class ProjectController extends Controller
         $doneRate=$total==0?0:round($countDone/$total*100,2);
         $searchModel = new SearchTask();
         $searchModel->project_id=$model->id;
-        $searchModel->post_type=1;
+//         $searchModel->post_type=1;
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $task=Task::findOne(['project_id'=>$model->id]);
         $questionDataProvider=new ActiveDataProvider([

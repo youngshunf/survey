@@ -171,11 +171,20 @@ class ProjectForm extends Model
             $task->province=trim($record['B']);
             $task->city=trim($record['C']);
             $task->district=trim($record['D']);
-            $task->address=trim($record['E']);
-            $F=trim($record['F']);
-            $task->end_time=empty($F)?strtotime($this->end_time):strtotime(trim($record['F']));
+            $task->shop=trim($record['E']);
+            $task->address=trim($record['F']);
+            $F=trim($record['G']);
+            $task->end_time=empty($F)?strtotime($this->end_time):strtotime(trim($record['G']));
             $task->desc=@$_POST['desc'];
-            $task->taskno=@trim($record['G']);
+            $task->taskno=@trim($record['H']);
+            if(!empty(trim($record['I']))){
+                $task->price=trim($record['I']);
+            }
+            
+            if(!empty(trim($record['J']))){
+                $task->desc=trim($record['J']);
+            }
+            
             $task->project_id=$project_id;
             $task->is_show_price=$this->is_show_price;
             $task->created_at=time();
