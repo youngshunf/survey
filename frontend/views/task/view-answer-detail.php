@@ -55,13 +55,40 @@ p{
                     if(!empty($answerArr)){
 				    $answer=explode(':', $answerArr['answer']);
 				    ?>
-				<p>答案: 选项<?=$answer[0]=1?>、<?= $answer[1]?>
+				<div>答案: 选项<?=$answer[0]=1?>、<?= $answer[1]?>
 				<?php if(!empty($answerArr->open_answer)){?>
 				;<?= $answerArr->open_answer ?>
 				<?php }?>
-				</p>
+				<?php if($role_id>=87){?>
+				<div class="edit-answer " style="display: none">
+				<form action="<?= Url::to(['edit-answer'])?>" method="post">
+				<input type="hidden" name="answer_guid" value="<?= @$model['answer_guid'] ?>" >
+				<input type="hidden" name="question_guid" value="<?= @$v['question_guid'] ?>" >
+				<input type="hidden" name="user_guid" value="<?= @$model['user_guid'] ?>" >
+				<input type="hidden" name="task_guid" value="<?= @$model['task_guid'] ?>" >
+				<input type="text" name="answer" value="<?= @$answerArr['answer'] ?>" >
+				<button type="submit" class="btn btn-primary">提交</button>
+				</form>
+				</div>
+				<a href="javascript:;" class="modify">修改</a> 
+				<?php }?>
+				</div>
 				<?php }else{?>
-				<p>未作答</p>
+				<div>未作答
+				<?php if($role_id>=87){?>
+				<div class="edit-answer " style="display: none">
+				<form action="<?= Url::to(['edit-answer'])?>" method="post">
+				<input type="hidden" name="answer_guid" value="<?= @$model['answer_guid'] ?>" >
+				<input type="hidden" name="question_guid" value="<?= @$v['question_guid'] ?>" >
+				<input type="hidden" name="user_guid" value="<?= @$model['user_guid'] ?>" >
+				<input type="hidden" name="task_guid" value="<?= @$model['task_guid'] ?>" >
+				<input type="text" name="answer" value="<?= @$answerArr['answer'] ?>" >
+				<button type="submit" class="btn btn-primary">提交</button>
+				</form>
+				</div>
+				<a href="javascript:;" class="modify">修改</a> 
+				<?php }?>
+				</div>
 				  <?php }?>
 				<?php }elseif ($v['type']==1){
 				    $answerArr=AnswerDetail::findOne(['answer_guid'=>$model->answer_guid, 'question_guid'=>$v['question_guid'],'user_guid'=>$model->user_guid]);
@@ -71,10 +98,28 @@ p{
 				   foreach ($answer as $item){
 				    $an=explode(':', $item);
 				    ?>
-				    <p>答案: 选项<?=$an[0]+1?>、<?= $an[1]?></p>
+				    <div>答案: 选项<?=$an[0]+1?>、<?= $an[1]?>
+				   
+				</div>
 				    <?php } }else{?>
-				    <p>未作答</p>
+				    <div>未作答
+				</div>
 				    <?php }?>
+				     <?php if($role_id>=87){?>
+				     <div>
+				<div class="edit-answer " style="display: none">
+				<form action="<?= Url::to(['edit-answer'])?>" method="post">
+				<input type="hidden" name="answer_guid" value="<?= @$model['answer_guid'] ?>" >
+				<input type="hidden" name="question_guid" value="<?= @$v['question_guid'] ?>" >
+				<input type="hidden" name="user_guid" value="<?= @$model['user_guid'] ?>" >
+				<input type="hidden" name="task_guid" value="<?= @$model['task_guid'] ?>" >
+				<input type="text" name="answer" value="<?= @$answerArr['answer'] ?>" >
+				<button type="submit" class="btn btn-primary">提交</button>
+				</form>
+				</div>
+				<a href="javascript:;" class="modify">修改</a> 
+				</div>
+				<?php }?>
 				
 				<?php }elseif ($v['type']==2 || $v['type']==4  ||  $v['type']==5 ||  $v['type']==6 ||$v['type']==7){
 				    $answerArr=AnswerDetail::findOne(['answer_guid'=>$model->answer_guid, 'question_guid'=>$v['question_guid'],'user_guid'=>$model->user_guid]);
@@ -136,7 +181,21 @@ p{
 				 
 				 
 				<?php }else{?>
-				<p>答案: <?= @$answerArr['answer']?></p>
+				<div><span class="answer"> 答案: <?= @$answerArr['answer']?> </span>
+				<?php if($role_id>=87){?>
+				<div class="edit-answer " style="display: none">
+				<form action="<?= Url::to(['edit-answer'])?>" method="post">
+				<input type="hidden" name="answer_guid" value="<?= @$model['answer_guid'] ?>" >
+				<input type="hidden" name="question_guid" value="<?= @$v['question_guid'] ?>" >
+				<input type="hidden" name="user_guid" value="<?= @$model['user_guid'] ?>" >
+				<input type="hidden" name="task_guid" value="<?= @$model['task_guid'] ?>" >
+				<input type="text" name="answer" value="<?= @$answerArr['answer'] ?>" >
+				<button type="submit" class="btn btn-primary">提交</button>
+				</form>
+				</div>
+				<a href="javascript:;" class="modify">修改</a> 
+				<?php }?>
+				</div>
 				<?php }?>
 				
 				<?php }elseif ($v['type']==3){
@@ -313,4 +372,17 @@ function checkSec(){
 	showWaiting('正在提交,请稍候...');
 	return true;
 }
+
+$('.modify').click(function(){
+	var answer=$(this).parent().find('.answer');
+	answer.toggle();
+	
+			 
+	$(this).parent().find('.edit-answer').toggle();
+	if($(this).parent().find('.edit-answer').is(":hidden")){
+		$(this).html('修改');
+		}else{
+			$(this).html('取消');
+       }
+})
 				</script>

@@ -331,6 +331,31 @@ class TaskController extends Controller
         ]);
     }
     
+    public function actionEditAnswer(){
+        $answer=@$_POST['answer'];
+        $answer_guid=@$_POST['answer_guid'];
+        $question_guid=@$_POST['question_guid'];
+        $user_guid=@$_POST['user_guid'];
+        $task_guid=@$_POST['task_guid'];
+        $answerDetail=AnswerDetail::findOne(['answer_guid'=>$answer_guid,'question_guid'=>$question_guid,'user_guid'=>$user_guid]);
+        if(empty($answerDetail)){
+            $answerDetail=new AnswerDetail();
+            $answerDetail->answer_guid=$answer_guid;
+            $answerDetail->question_guid=$question_guid;
+            $answerDetail->user_guid=$user_guid;
+            $answerDetail->task_guid=$task_guid;
+            $answerDetail->created_at=time();
+        }
+        $answerDetail->answer=$answer;
+        if($answerDetail->save()){
+            yii::$app->getSession()->setFlash('success','修改成功!');
+        }else{
+            yii::$app->getSession()->setFlash('success','修改失败!');
+        }
+        
+        return $this->redirect(yii::$app->request->referrer);
+    }
+    
     public function actionViewAnswerPhoto($task_guid,$question_guid,$user_guid){
         if(!empty($_GET['answer_guid'])){
             $answer_guid=$_GET['answer_guid'];
@@ -1215,9 +1240,11 @@ class TaskController extends Controller
                     $result="";
                     if(!empty($answerDetail)){
                         $optArrs=json_decode($answerDetail->answer,true);
-                        foreach ($optArrs as $a){
-                            $optArr=explode(':', $a);
-                            $result .= $optArr[1].";";
+                        if(!empty($optArrs) && is_array($optArrs)){
+                            foreach ($optArrs as $a){
+                                $optArr=explode(':', $a);
+                                $result .= $optArr[1].";";
+                            }
                         }
                         $resultExcel->getActiveSheet()->setCellValue($col.$i,$result);
                     }

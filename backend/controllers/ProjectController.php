@@ -627,9 +627,11 @@ class ProjectController extends Controller
                     $result="";
                     if(!empty($answerDetail)){
                         $optArrs=json_decode($answerDetail->answer,true);
+                        if(!empty($optArrs) && is_array($optArrs)){
                         foreach ($optArrs as $a){
                             $optArr=explode(':', $a);
                             $result .=$optArr[1].";";
+                        }
                         }
                         $resultExcel->getActiveSheet()->setCellValue((string)$col.(string)$i,$result);
                     }
@@ -820,9 +822,11 @@ class ProjectController extends Controller
                         $result="";
                         if(!empty($answerDetail)){
                             $optArrs=json_decode($answerDetail->answer,true);
+                            if(!empty($optArrs) && is_array($optArrs)){
                             foreach ($optArrs as $a){
                                 $optArr=explode(':', $a);
                                 $result .=$optArr[1].";";
+                            }
                             }
                             $resultExcel->getActiveSheet()->setCellValue((string)$col.(string)$i,$result);
                         }
