@@ -559,7 +559,7 @@ class ProjectController extends Controller
         }
         
         $resultExcel=new \PHPExcel();
-        $resultExcel->getActiveSheet()->setCellValue('A1','序号');
+       $resultExcel->getActiveSheet()->setCellValue('A1','序号');
         $resultExcel->getActiveSheet()->setCellValue('B1','答案唯一编号');
         $resultExcel->getActiveSheet()->setCellValue('C1','任务名称');
         $resultExcel->getActiveSheet()->setCellValue('D1','姓名');
@@ -575,9 +575,11 @@ class ProjectController extends Controller
         $resultExcel->getActiveSheet()->setCellValue('N1','领取地点');
         $resultExcel->getActiveSheet()->setCellValue('O1','答题时间');
         $resultExcel->getActiveSheet()->setCellValue('P1','答题地点');
-        $resultExcel->getActiveSheet()->setCellValue('Q1','提交时间');
-        $resultExcel->getActiveSheet()->setCellValue('R1','答题时长(秒)');
-        $resultExcel->getActiveSheet()->setCellValue('S1','提交地点');
+        $resultExcel->getActiveSheet()->setCellValue('Q1','结束时间');
+        $resultExcel->getActiveSheet()->setCellValue('R1','结束地点');
+        $resultExcel->getActiveSheet()->setCellValue('S1','答题时长(秒)');
+        $resultExcel->getActiveSheet()->setCellValue('T1','提交时间');
+        $resultExcel->getActiveSheet()->setCellValue('U1','提交地点');
        
         $taskOne=Task::findOne(['project_id'=>$project_id]);
         $questions=Question::find()->andWhere(['task_guid'=>$taskOne->task_guid])->orderBy('code asc')->all();
@@ -609,9 +611,11 @@ class ProjectController extends Controller
             $resultExcel->getActiveSheet()->setCellValue('N'.$i,$item['start_address']);
             $resultExcel->getActiveSheet()->setCellValue('O'.$i,CommonUtil::fomatTime($item['answer_time']));
             $resultExcel->getActiveSheet()->setCellValue('P'.$i,$item['answer_address']);
-            $resultExcel->getActiveSheet()->setCellValue('Q'.$i,CommonUtil::fomatTime($item['end_time']));
-            $resultExcel->getActiveSheet()->setCellValue('R'.$i,$item['end_time']-$item['answer_time']);
-            $resultExcel->getActiveSheet()->setCellValue('S'.$i,$item['submit_address']);
+            $resultExcel->getActiveSheet()->setCellValue('Q'.$i,CommonUtil::fomatTime((!empty($item['save_time'])?$item['save_time']:$item['end_time'])));
+            $resultExcel->getActiveSheet()->setCellValue('R'.$i,!empty($item['save_address'])?$item['save_address']:$item['submit_address']);
+            $resultExcel->getActiveSheet()->setCellValue('S'.$i,(!empty($item['save_time'])?$item['save_time']:$item['end_time'])-$item['answer_time']);
+            $resultExcel->getActiveSheet()->setCellValue('T'.$i,CommonUtil::fomatTime($item['end_time']));
+            $resultExcel->getActiveSheet()->setCellValue('U'.$i,$item['submit_address']);
     
             $col='S';
             $questions=Question::find()->andWhere(['task_guid'=>$im->task_guid])->orderBy('code asc')->all();
@@ -847,9 +851,11 @@ class ProjectController extends Controller
         $resultExcel->getActiveSheet()->setCellValue('N1','领取地点');
         $resultExcel->getActiveSheet()->setCellValue('O1','答题时间');
         $resultExcel->getActiveSheet()->setCellValue('P1','答题地点');
-        $resultExcel->getActiveSheet()->setCellValue('Q1','提交时间');
-        $resultExcel->getActiveSheet()->setCellValue('R1','答题时长(秒)');
-        $resultExcel->getActiveSheet()->setCellValue('S1','提交地点');
+        $resultExcel->getActiveSheet()->setCellValue('Q1','结束时间');
+        $resultExcel->getActiveSheet()->setCellValue('R1','结束地点');
+        $resultExcel->getActiveSheet()->setCellValue('S1','答题时长(秒)');
+        $resultExcel->getActiveSheet()->setCellValue('T1','提交时间');
+        $resultExcel->getActiveSheet()->setCellValue('U1','提交地点');
          
         $taskOne=Task::findOne(['project_id'=>$project_id]);
         $questions=Question::find()->andWhere(['task_guid'=>$taskOne->task_guid])->orderBy('code asc')->all();
@@ -881,10 +887,11 @@ class ProjectController extends Controller
                 $resultExcel->getActiveSheet()->setCellValue('N'.$i,$item['start_address']);
                 $resultExcel->getActiveSheet()->setCellValue('O'.$i,CommonUtil::fomatTime($item['answer_time']));
                 $resultExcel->getActiveSheet()->setCellValue('P'.$i,$item['answer_address']);
-                $resultExcel->getActiveSheet()->setCellValue('Q'.$i,CommonUtil::fomatTime($item['end_time']));
-                $resultExcel->getActiveSheet()->setCellValue('R'.$i,$item['end_time']-$item['answer_time']);
-                $resultExcel->getActiveSheet()->setCellValue('S'.$i,$item['submit_address']);
-    
+                $resultExcel->getActiveSheet()->setCellValue('Q'.$i,CommonUtil::fomatTime((!empty($item['save_time'])?$item['save_time']:$item['end_time'])));
+                $resultExcel->getActiveSheet()->setCellValue('R'.$i,!empty($item['save_address'])?$item['save_address']:$item['submit_address']);
+                $resultExcel->getActiveSheet()->setCellValue('S'.$i,(!empty($item['save_time'])?$item['save_time']:$item['end_time'])-$item['answer_time']);
+                $resultExcel->getActiveSheet()->setCellValue('T'.$i,CommonUtil::fomatTime($item['end_time']));
+                $resultExcel->getActiveSheet()->setCellValue('U'.$i,$item['submit_address']);
                 $col='S';
                 $questions=Question::find()->andWhere(['task_guid'=>$im->task_guid])->orderBy('code asc')->all();
                 foreach ($questions as $k=>$v){
