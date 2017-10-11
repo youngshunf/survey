@@ -572,6 +572,8 @@ use yii\helpers\Json;
          curl_close($curl); // 关闭CURL会话
          return $tmpInfo; // 返回数据
      }
+     
+     
 	}
 	
 	

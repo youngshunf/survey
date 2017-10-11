@@ -93,7 +93,7 @@ class TaskController extends Controller
         if(empty($user)){
             return CommonUtil::error('e1006');
         }
-        $url="https://qr.huggies.com.cn:8066/api/proj/openapi/flow/codeflow";
+        $url="https://qr.huggies.com.cn:8099/api/proj/openapi/flow/codeflow";
        $ua=yii::$app->request->getUserAgent();
        if(strstr($ua, 'Android')){
            $terminalType= 'ANDROID';
@@ -183,7 +183,7 @@ class TaskController extends Controller
     
     protected function  queryImg($result,$img){
     
-        $url="https://qr.huggies.com.cn:8066/api/proj/openapi/flow/setrecordimg";
+        $url="https://qr.huggies.com.cn:8099/api/proj/openapi/flow/setrecordimg";
         $ua=yii::$app->request->getUserAgent();
         if(empty($result)){
             return false;

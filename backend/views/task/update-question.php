@@ -149,6 +149,13 @@ $this->params['breadcrumbs'][] = $this->title;
                     <label class="label-control">上传图片数量</label>                
                     <input type="number" name="imgnum" class="form-control" id="imgnum" value="<?= $model->max_photo?>">                                  
                 </div>
+                <div class="form-group">
+                    <label class="label-control">拍照类型</label>       
+                    <select name="phototype" class="form-control">
+                    <option value="1">仅拍照</option>
+                    <option value="2">拍照和相册选择</option>
+                    </select>         
+                </div>
                 </div>
                 
                 

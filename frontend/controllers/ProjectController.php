@@ -56,7 +56,7 @@ class ProjectController extends Controller
         $searchModel = new SearchProject();
         $searchModel->user_guid=yii::$app->user->identity->user_guid;
         $user=yii::$app->user->identity;
-        if($user->role_id==87||$user->role_id==86){
+        if($user->role_id==88 || $user->role_id==87||$user->role_id==86){
             $searchModel->user_guid=$user->parent_user;
         }
         
@@ -543,9 +543,11 @@ class ProjectController extends Controller
                     $result="";
                     if(!empty($answerDetail)){
                         $optArrs=json_decode($answerDetail->answer,true);
+                        if(!empty($optArrs) && is_array($optArrs)){
                         foreach ($optArrs as $a){
                             $optArr=explode(':', $a);
                             $result .= $optArr[1].";";
+                        }
                         }
                         $resultExcel->getActiveSheet()->setCellValue((string)$col.(string)$i,$result);
                     }
@@ -875,9 +877,11 @@ class ProjectController extends Controller
                         $result="";
                         if(!empty($answerDetail)){
                             $optArrs=json_decode($answerDetail->answer,true);
+                            if(!empty($optArrs) && is_array($optArrs)){
                             foreach ($optArrs as $a){
                                 $optArr=explode(':', $a);
                                 $result .= $optArr[1].";";
+                            }
                             }
                             $resultExcel->getActiveSheet()->setCellValue((string)$col.(string)$i,$result);
                         }

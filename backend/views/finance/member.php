@@ -40,10 +40,10 @@ $this->params['breadcrumbs'][] = $this->title;
             'paid',
             'total_income',
              'withdrawing',
-            ['class' => 'yii\grid\ActionColumn',
-            'header'=>'操作',
-             'template'=>'{view}'
-            ],
+//             ['class' => 'yii\grid\ActionColumn',
+//             'header'=>'操作',
+//              'template'=>'{view}'
+//             ],
         ],
     ]); ?>
 

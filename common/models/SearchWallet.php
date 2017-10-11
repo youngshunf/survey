@@ -65,7 +65,7 @@ class SearchWallet extends Wallet
             'non_payment' => $this->non_payment,
             'paid' => $this->paid,
             'total_income' => $this->total_income,
-            'created_at' => $this->created_at,
+            'wallet.created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'withdrawing' => $this->withdrawing,
         ]);
