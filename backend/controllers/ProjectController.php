@@ -212,6 +212,8 @@ class ProjectController extends Controller
      */
     public function actionCreate()
     {
+      
+     
         $model = new ProjectForm();
         $model->setScenario('create');
 
@@ -219,6 +221,12 @@ class ProjectController extends Controller
             $id=$model->createProject();
             if($id){
                 return $this->redirect(['view', 'id' => $id]);
+            }else{
+                $group=Group::find()->andWhere(['create_by'=>yii::$app->user->identity->user_guid])->all();
+                return $this->render('create', [
+                    'model' => $model,
+                    'group'=>$group
+                ]);
             }
         } 
         
@@ -551,7 +559,7 @@ class ProjectController extends Controller
         }
         
         $resultExcel=new \PHPExcel();
-        $resultExcel->getActiveSheet()->setCellValue('A1','序号');
+       $resultExcel->getActiveSheet()->setCellValue('A1','序号');
         $resultExcel->getActiveSheet()->setCellValue('B1','答案唯一编号');
         $resultExcel->getActiveSheet()->setCellValue('C1','任务名称');
         $resultExcel->getActiveSheet()->setCellValue('D1','姓名');
@@ -567,9 +575,11 @@ class ProjectController extends Controller
         $resultExcel->getActiveSheet()->setCellValue('N1','领取地点');
         $resultExcel->getActiveSheet()->setCellValue('O1','答题时间');
         $resultExcel->getActiveSheet()->setCellValue('P1','答题地点');
-        $resultExcel->getActiveSheet()->setCellValue('Q1','提交时间');
-        $resultExcel->getActiveSheet()->setCellValue('R1','答题时长(秒)');
-        $resultExcel->getActiveSheet()->setCellValue('S1','提交地点');
+        $resultExcel->getActiveSheet()->setCellValue('Q1','结束时间');
+        $resultExcel->getActiveSheet()->setCellValue('R1','结束地点');
+        $resultExcel->getActiveSheet()->setCellValue('S1','答题时长(秒)');
+        $resultExcel->getActiveSheet()->setCellValue('T1','提交时间');
+        $resultExcel->getActiveSheet()->setCellValue('U1','提交地点');
        
         $taskOne=Task::findOne(['project_id'=>$project_id]);
         $questions=Question::find()->andWhere(['task_guid'=>$taskOne->task_guid])->orderBy('code asc')->all();
@@ -601,9 +611,11 @@ class ProjectController extends Controller
             $resultExcel->getActiveSheet()->setCellValue('N'.$i,$item['start_address']);
             $resultExcel->getActiveSheet()->setCellValue('O'.$i,CommonUtil::fomatTime($item['answer_time']));
             $resultExcel->getActiveSheet()->setCellValue('P'.$i,$item['answer_address']);
-            $resultExcel->getActiveSheet()->setCellValue('Q'.$i,CommonUtil::fomatTime($item['end_time']));
-            $resultExcel->getActiveSheet()->setCellValue('R'.$i,$item['end_time']-$item['answer_time']);
-            $resultExcel->getActiveSheet()->setCellValue('S'.$i,$item['submit_address']);
+            $resultExcel->getActiveSheet()->setCellValue('Q'.$i,CommonUtil::fomatTime((!empty($item['save_time'])?$item['save_time']:$item['end_time'])));
+            $resultExcel->getActiveSheet()->setCellValue('R'.$i,!empty($item['save_address'])?$item['save_address']:$item['submit_address']);
+            $resultExcel->getActiveSheet()->setCellValue('S'.$i,(!empty($item['save_time'])?$item['save_time']:$item['end_time'])-$item['answer_time']);
+            $resultExcel->getActiveSheet()->setCellValue('T'.$i,CommonUtil::fomatTime($item['end_time']));
+            $resultExcel->getActiveSheet()->setCellValue('U'.$i,$item['submit_address']);
     
             $col='S';
             $questions=Question::find()->andWhere(['task_guid'=>$im->task_guid])->orderBy('code asc')->all();
@@ -627,11 +639,9 @@ class ProjectController extends Controller
                     $result="";
                     if(!empty($answerDetail)){
                         $optArrs=json_decode($answerDetail->answer,true);
-                        if(!empty($optArrs) && is_array($optArrs)){
                         foreach ($optArrs as $a){
                             $optArr=explode(':', $a);
                             $result .=$optArr[1].";";
-                        }
                         }
                         $resultExcel->getActiveSheet()->setCellValue((string)$col.(string)$i,$result);
                     }
@@ -661,7 +671,7 @@ class ProjectController extends Controller
                         $resultExcel->getActiveSheet()->getStyle($col.$i)->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
                     }
                 }elseif ($v->type==5){
-                    $answerDetail=AnswerDetail::findOne(['answer_guid'=>$item['answer_guid'],'task_guid'=>$im->task_guid,'question_guid'=>$v['question_guid'],'user_guid'=>$item['user_guid']]);
+                        $answerDetail=AnswerDetail::findOne(['answer_guid'=>$item['answer_guid'],'task_guid'=>$im->task_guid,'question_guid'=>$v['question_guid'],'user_guid'=>$item['user_guid']]);
                     if(!empty($answerDetail)){
                         $r="";
                         $arr=$answerDetail->open_answer;
@@ -675,9 +685,7 @@ class ProjectController extends Controller
                                 }
                                 $r.="第".($k+1)."次\n";
                                 $r.="扫码结果:".$a["qrcode"].";\n".
-                                    "扫码时间:".CommonUtil::fomatTime(@$a["time"]).";\n".
-                                "定位地址:".@$a["locateAddress"].";\n".
-                                "输入地址:".$a["inputAddress"].";\n";
+                                    "输入地址:".$a["inputAddress"].";\n";
                                 if($result['code']==0){
                                     $codeInfo=@$result['data']['codeInfo'];
                                     $flowList=@$result['data']['flowList'];
@@ -699,8 +707,8 @@ class ProjectController extends Controller
                                 }
                             }
                         }
-                        
-                        
+                    
+                    
                         $a=$answerDetail->answer;
                         $a=json_decode($a,true);
                         $result=@$a['result'];
@@ -819,9 +827,9 @@ class ProjectController extends Controller
     //导出问题答案
     public function actionBatchExportExcel($project_id){
         $project=Project::findOne($project_id);
-        $taskCount=Task::find()->andWhere(['project_id'=>$project_id])->count();
+        $taskArr=Task::find()->andWhere(['project_id'=>$project_id])->all();
     
-        if($taskCount<=0){
+        if(empty($taskArr)){
             yii::$app->getSession()->setFlash('error','没有数据哦!');
             return $this->redirect(yii::$app->request->referrer);
         }
@@ -843,9 +851,11 @@ class ProjectController extends Controller
         $resultExcel->getActiveSheet()->setCellValue('N1','领取地点');
         $resultExcel->getActiveSheet()->setCellValue('O1','答题时间');
         $resultExcel->getActiveSheet()->setCellValue('P1','答题地点');
-        $resultExcel->getActiveSheet()->setCellValue('Q1','提交时间');
-        $resultExcel->getActiveSheet()->setCellValue('R1','答题时长(秒)');
-        $resultExcel->getActiveSheet()->setCellValue('S1','提交地点');
+        $resultExcel->getActiveSheet()->setCellValue('Q1','结束时间');
+        $resultExcel->getActiveSheet()->setCellValue('R1','结束地点');
+        $resultExcel->getActiveSheet()->setCellValue('S1','答题时长(秒)');
+        $resultExcel->getActiveSheet()->setCellValue('T1','提交时间');
+        $resultExcel->getActiveSheet()->setCellValue('U1','提交地点');
          
         $taskOne=Task::findOne(['project_id'=>$project_id]);
         $questions=Question::find()->andWhere(['task_guid'=>$taskOne->task_guid])->orderBy('code asc')->all();
@@ -857,10 +867,10 @@ class ProjectController extends Controller
         }
     
         $i=2;
-        foreach (Task::find()->andWhere(['project_id'=>$project_id])->each(10) as $ky=>$im){
+        foreach ($taskArr as $ky=>$im){
             $answerArr=Answer::findAll(['task_guid'=>$im->task_guid]);
             
-            foreach (Answer::find()->andWhere(['task_guid'=>$im->task_guid])->each(10) as $key=>$item){
+            foreach ($answerArr as $key=>$item){
                 $resultExcel->getActiveSheet()->setCellValue('A'.$i,$key+1);
                 $resultExcel->getActiveSheet()->setCellValue('B'.$i,$item['answer_guid']);
                 $resultExcel->getActiveSheet()->setCellValue('C'.$i,$im['name']);
@@ -877,10 +887,11 @@ class ProjectController extends Controller
                 $resultExcel->getActiveSheet()->setCellValue('N'.$i,$item['start_address']);
                 $resultExcel->getActiveSheet()->setCellValue('O'.$i,CommonUtil::fomatTime($item['answer_time']));
                 $resultExcel->getActiveSheet()->setCellValue('P'.$i,$item['answer_address']);
-                $resultExcel->getActiveSheet()->setCellValue('Q'.$i,CommonUtil::fomatTime($item['end_time']));
-                $resultExcel->getActiveSheet()->setCellValue('R'.$i,$item['end_time']-$item['answer_time']);
-                $resultExcel->getActiveSheet()->setCellValue('S'.$i,$item['submit_address']);
-    
+                $resultExcel->getActiveSheet()->setCellValue('Q'.$i,CommonUtil::fomatTime((!empty($item['save_time'])?$item['save_time']:$item['end_time'])));
+                $resultExcel->getActiveSheet()->setCellValue('R'.$i,!empty($item['save_address'])?$item['save_address']:$item['submit_address']);
+                $resultExcel->getActiveSheet()->setCellValue('S'.$i,(!empty($item['save_time'])?$item['save_time']:$item['end_time'])-$item['answer_time']);
+                $resultExcel->getActiveSheet()->setCellValue('T'.$i,CommonUtil::fomatTime($item['end_time']));
+                $resultExcel->getActiveSheet()->setCellValue('U'.$i,$item['submit_address']);
                 $col='S';
                 $questions=Question::find()->andWhere(['task_guid'=>$im->task_guid])->orderBy('code asc')->all();
                 foreach ($questions as $k=>$v){
@@ -903,11 +914,9 @@ class ProjectController extends Controller
                         $result="";
                         if(!empty($answerDetail)){
                             $optArrs=json_decode($answerDetail->answer,true);
-                            if(!empty($optArrs) && is_array($optArrs)){
                             foreach ($optArrs as $a){
                                 $optArr=explode(':', $a);
                                 $result .=$optArr[1].";";
-                            }
                             }
                             $resultExcel->getActiveSheet()->setCellValue((string)$col.(string)$i,$result);
                         }
@@ -936,10 +945,9 @@ class ProjectController extends Controller
                         $resultExcel->getActiveSheet()->getCell($col.$i)->getHyperlink()->setUrl($url);
                         $resultExcel->getActiveSheet()->getStyle($col.$i)->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
                     }
-                 }
-                elseif ($v->type==5){
-                    $answerDetail=AnswerDetail::findOne(['answer_guid'=>$item['answer_guid'],'task_guid'=>$im->task_guid,'question_guid'=>$v['question_guid'],'user_guid'=>$item['user_guid']]);
-                    if(!empty($answerDetail)){
+                    }elseif ($v->type==5){
+                        $answerDetail=AnswerDetail::findOne(['answer_guid'=>$item['answer_guid'],'task_guid'=>$im->task_guid,'question_guid'=>$v['question_guid'],'user_guid'=>$item['user_guid']]);
+                     if(!empty($answerDetail)){
                         $r="";
                         $arr=$answerDetail->open_answer;
                         if(!empty($arr)){
@@ -952,8 +960,6 @@ class ProjectController extends Controller
                                 }
                                 $r.="第".($k+1)."次\n";
                                 $r.="扫码结果:".$a["qrcode"].";\n".
-                                    "扫码时间:".CommonUtil::fomatTime(@$a["time"]).";\n".
-                                    "定位地址:".@$a["locateAddress"].";\n".
                                     "输入地址:".$a["inputAddress"].";\n";
                                 if($result['code']==0){
                                     $codeInfo=@$result['data']['codeInfo'];
@@ -976,8 +982,8 @@ class ProjectController extends Controller
                                 }
                             }
                         }
-                        
-                        
+                    
+                    
                         $a=$answerDetail->answer;
                         $a=json_decode($a,true);
                         $result=@$a['result'];
@@ -1018,7 +1024,6 @@ class ProjectController extends Controller
                         $resultExcel->getActiveSheet()->setCellValue((string)$col.(string)$i,$r);
                         $resultExcel->getActiveSheet()->getStyle((string)$col.(string)$i)->getAlignment()->setWrapText(true);
                     }
-                    
                 }
                      
                 }
