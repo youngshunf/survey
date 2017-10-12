@@ -586,6 +586,8 @@ class ProjectController extends Controller
                                 }
                                 $r.="第".($k+1)."次\n";
                                 $r.="扫码结果:".$a["qrcode"].";\n".
+                                    "扫码时间:".CommonUtil::fomatTime(@$a["time"]).";\n".
+                                    "定位地址:".@$a["locateAddress"].";\n".
                                     "输入地址:".$a["inputAddress"].";\n";
                                 if($result['code']==0){
                                     $codeInfo=@$result['data']['codeInfo'];
@@ -917,6 +919,8 @@ class ProjectController extends Controller
                                 }
                                 $r.="第".($k+1)."次\n";
                                 $r.="扫码结果:".$a["qrcode"].";\n".
+                                    "扫码时间:".CommonUtil::fomatTime(@$a["time"]).";\n".
+                                    "定位地址:".@$a["locateAddress"].";\n".
                                     "输入地址:".$a["inputAddress"].";\n";
                                 if($result['code']==0){
                                     $codeInfo=@$result['data']['codeInfo'];

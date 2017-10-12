@@ -239,6 +239,31 @@ class TaskController extends Controller
         ]);
     }
     
+    public function actionEditAnswer(){
+        $answer=@$_POST['answer'];
+        $answer_guid=@$_POST['answer_guid'];
+        $question_guid=@$_POST['question_guid'];
+        $user_guid=@$_POST['user_guid'];
+        $task_guid=@$_POST['task_guid'];
+        $answerDetail=AnswerDetail::findOne(['answer_guid'=>$answer_guid,'question_guid'=>$question_guid,'user_guid'=>$user_guid]);
+        if(empty($answerDetail)){
+            $answerDetail=new AnswerDetail();
+            $answerDetail->answer_guid=$answer_guid;
+            $answerDetail->question_guid=$question_guid;
+            $answerDetail->user_guid=$user_guid;
+            $answerDetail->task_guid=$task_guid;
+            $answerDetail->created_at=time();
+        }
+        $answerDetail->answer=$answer;
+        if($answerDetail->save()){
+            yii::$app->getSession()->setFlash('success','修改成功!');
+        }else{
+            yii::$app->getSession()->setFlash('success','修改失败!');
+        }
+        
+        return $this->redirect(yii::$app->request->referrer);
+    }
+    
   public function actionChooseTemplateDo(){
         $templateid=$_POST['templateid'];
         $template=Template::findOne($templateid);
@@ -1256,6 +1281,8 @@ class TaskController extends Controller
                         }
                         $r.="第".($k+1)."次\n";
                         $r.="扫码结果:".$a["qrcode"].";\n".
+                            "扫码时间:".CommonUtil::fomatTime(@$a["time"]).";\n".
+                            "定位地址:".@$a["locateAddress"].";\n".
                             "输入地址:".$a["inputAddress"].";\n";
                         if($result['code']==0){
                             $codeInfo=@$result['data']['codeInfo'];

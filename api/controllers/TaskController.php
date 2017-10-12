@@ -109,24 +109,25 @@ class TaskController extends Controller
         $str1=explode('省', $address);
         $province='';
         $city='';
-        $addr='';
+        $addr=$address;
         if(count($str1)==2){
             $province=$str1[0].'省';
             $str2=explode('市', $str1[1]);
-            if(count($str2)==2){
+            if(count($str2)>=2){
                 $city=$str2[0].'市';
                 $addr=$str2[1];
             }
         }else{
             $str1=explode('市', $address);
-            if(count($str1)==2){
+            if(count($str1)>=2){
                 $province=$str1[0].'市';
                 $city=$str1[0].'市';
                 $str2=explode('区', $str1[1]);
-                if(count($str2)==2){
+                if(count($str2)>=2){
                     $addr=$str2[1];
+                    $address=$province.$city.$addr;
                 }
-                $address=$province.$city.$addr;
+                
             }
         }
 //          $code='00581708300000737243';
@@ -145,7 +146,7 @@ class TaskController extends Controller
         $answer_guid=@$postData['answer_guid'];
         $task_guid=@$postData['task_guid'];
         $question_guid=@$postData['question_guid'];
-        if(empty($answerDetail)){
+            if(empty($answerDetail)){
                 $answerDetail=new AnswerDetail();
                 $answerDetail->created_at=time();
             }else{
@@ -167,8 +168,11 @@ class TaskController extends Controller
             $a=[
                 'qrcode'=>$code,
                 'result'=>$res,
+                'data'=>$data,
+                'locateAddress'=>$address,
                 'inputAddress'=>$inputAddress,
-                'terminalType'=>$terminalType
+                'terminalType'=>$terminalType,
+                'time'=>time()
             ];
             $answerArr=[];
             if(!empty($answerDetail->open_answer)){

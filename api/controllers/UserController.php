@@ -294,6 +294,9 @@ class UserController extends Controller
         $amount=$data['amount'];
         $trans=yii::$app->db->beginTransaction();
         $wallet=Wallet::findOne(['user_guid'=>$user->user_guid]);
+        if($amount<=0){
+            return CommonUtil::success('提现金额不能小于0');
+        }
         if($amount>$wallet->non_payment){
             return CommonUtil::success('提现金额不能大于余额');
         }

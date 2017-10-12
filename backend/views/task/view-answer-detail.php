@@ -137,6 +137,8 @@ p{
 				    foreach ($arr as $k=>$qr){?>
 				    <h6>第<?= $k+1?>次</h6>
 				    <p>扫码结果: <?= @$qr['qrcode']?></p>
+				     <p>扫码时间: <?= CommonUtil::fomatTime(@$qr['time'])?></p>
+				      <p>定位地址: <?= @$qr['locateAddress']?></p>
 				    <p>输入地址: <?= @$qr['inputAddress']?></p>
 				    <p>终端类型: <?= @$qr['terminalType']?></p>
 				    <?php 
