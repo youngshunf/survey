@@ -1187,7 +1187,7 @@ class TaskController extends Controller
         $resultExcel->getActiveSheet()->setCellValue('U1','提交地点');
 
         $questions=Question::find()->andWhere(['task_guid'=>$task_guid])->orderBy('code asc')->all();
-        $col='S';
+        $col='U';
         foreach ($questions as $k=>$v){
             $col++;
             $result =($k+1).'.【'.CommonUtil::getDescByValue('question', 'type', $v->type).'】'.$v->name;
@@ -1218,7 +1218,7 @@ class TaskController extends Controller
             $resultExcel->getActiveSheet()->setCellValue('T'.$i,CommonUtil::fomatTime($item['end_time']));
             $resultExcel->getActiveSheet()->setCellValue('U'.$i,$item['submit_address']);
 
-            $col='S';
+            $col='U';
             foreach ($questions as $k=>$v){
                 $col++;
                 if($v->type==0){

@@ -583,7 +583,7 @@ class ProjectController extends Controller
        
         $taskOne=Task::findOne(['project_id'=>$project_id]);
         $questions=Question::find()->andWhere(['task_guid'=>$taskOne->task_guid])->orderBy('code asc')->all();
-        $col='S';
+        $col='U';
         foreach ($questions as $k=>$v){
             $col++;
             $result =($k+1).'.【'.CommonUtil::getDescByValue('question', 'type', $v->type).'】'.$v->name;
@@ -617,7 +617,7 @@ class ProjectController extends Controller
             $resultExcel->getActiveSheet()->setCellValue('T'.$i,CommonUtil::fomatTime($item['end_time']));
             $resultExcel->getActiveSheet()->setCellValue('U'.$i,$item['submit_address']);
     
-            $col='S';
+            $col='U';
             $questions=Question::find()->andWhere(['task_guid'=>$im->task_guid])->orderBy('code asc')->all();
             foreach ($questions as $k=>$v){ 
                 $col++;
@@ -685,6 +685,8 @@ class ProjectController extends Controller
                                 }
                                 $r.="第".($k+1)."次\n";
                                 $r.="扫码结果:".$a["qrcode"].";\n".
+                                    "扫码时间:".CommonUtil::fomatTime(@$a["time"]).";\n".
+                                    "定位地址:".@$a["locateAddress"].";\n".
                                     "输入地址:".$a["inputAddress"].";\n";
                                 if($result['code']==0){
                                     $codeInfo=@$result['data']['codeInfo'];
@@ -859,7 +861,7 @@ class ProjectController extends Controller
          
         $taskOne=Task::findOne(['project_id'=>$project_id]);
         $questions=Question::find()->andWhere(['task_guid'=>$taskOne->task_guid])->orderBy('code asc')->all();
-        $col='S';
+        $col='U';
         foreach ($questions as $k=>$v){
             $col++;
             $result =($k+1).'.【'.CommonUtil::getDescByValue('question', 'type', $v->type).'】'.$v->name;
@@ -892,7 +894,7 @@ class ProjectController extends Controller
                 $resultExcel->getActiveSheet()->setCellValue('S'.$i,(!empty($item['save_time'])?$item['save_time']:$item['end_time'])-$item['answer_time']);
                 $resultExcel->getActiveSheet()->setCellValue('T'.$i,CommonUtil::fomatTime($item['end_time']));
                 $resultExcel->getActiveSheet()->setCellValue('U'.$i,$item['submit_address']);
-                $col='S';
+                $col='U';
                 $questions=Question::find()->andWhere(['task_guid'=>$im->task_guid])->orderBy('code asc')->all();
                 foreach ($questions as $k=>$v){
                     $col++;
@@ -960,6 +962,8 @@ class ProjectController extends Controller
                                 }
                                 $r.="第".($k+1)."次\n";
                                 $r.="扫码结果:".$a["qrcode"].";\n".
+                                    "扫码时间:".CommonUtil::fomatTime(@$a["time"]).";\n".
+                                    "定位地址:".@$a["locateAddress"].";\n".
                                     "输入地址:".$a["inputAddress"].";\n";
                                 if($result['code']==0){
                                     $codeInfo=@$result['data']['codeInfo'];
