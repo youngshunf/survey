@@ -360,7 +360,7 @@ class ProjectController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
-            return $this->render('update', [
+            return $this->render('update_project', [
                 'model' => $model,
             ]);
         }
@@ -375,6 +375,11 @@ class ProjectController extends Controller
          }
          $model->end_time=date('Y-m-d H:i:s',$model->end_time);
         if($model->load(yii::$app->request->post())){
+            $photo=ImageUploader::uploadByName('photo');
+            if($photo){
+                $model->path=@$photo['path'];
+                $model->photo=@$photo['photo'];
+            }
             Task::updateAll([
                 'type'=>$model->type,
                 'answer_type'=>$model->answer_type,
@@ -387,6 +392,8 @@ class ProjectController extends Controller
                 'is_show_price'=>$model->is_show_price,
                 'do_type'=>$model->do_type,
                 'max_times'=>$model->max_times,
+                'path'=>$model->path,
+                'photo'=>$model->photo,
                 'end_time'=> strtotime($model->end_time),
                 'desc'=>@$_POST['desc']
             ],['project_id'=>$id]);

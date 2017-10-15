@@ -23,6 +23,7 @@ use common\models\Group;
 use yii\helpers\Url;
 use backend\models\ProjectForm;
 use yii\data\ActiveDataProvider;
+use common\models\ImageUploader;
 
 /**
  * ProjectController implements the CRUD actions for Project model.
@@ -429,6 +430,11 @@ class ProjectController extends Controller
         }
         $model->end_time=date('Y-m-d H:i:s',$model->end_time);
         if($model->load(yii::$app->request->post())){
+            $photo=ImageUploader::uploadByName('photo');
+            if($photo){
+                $model->path=@$photo['path'];
+                $model->photo=@$photo['photo'];
+            }
             Task::updateAll([
                 'type'=>$model->type,
                 'answer_type'=>$model->answer_type,
@@ -442,6 +448,8 @@ class ProjectController extends Controller
                 'do_type'=>$model->do_type,
                 'max_times'=>$model->max_times,
                 'end_time'=> strtotime($model->end_time),
+                'path'=>$model->path,
+                'photo'=>$model->photo,
                 'desc'=>@$_POST['desc']
             ],['project_id'=>$id]);
             return $this->redirect(['view','id'=>$id]);

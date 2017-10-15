@@ -56,16 +56,48 @@ $this->registerJsFile('@web/js/PCASClass.js', ['position'=> View::POS_HEAD]);
                 'ucontent'=>$model->desc,
                 ]);  ?>
         </div>
-        
+       <div class="form-group">
+        <label class="control-label"> 封面图片</label>
+        <div class="img-container">
+        <?php if(empty($model->photo)){?>
+                <div class="uploadify-button"> 
+                </div>
+        <?php }else{?>
+            <img alt="封面图片" src="<?= yii::getAlias('@photo').'/'.$model->path.'thumb/'.$model->photo?>" class="img-responsive">
+            <span>点击图片修改</span>
+        <?php }?>
+        </div>
+       <input type="file" name="photo"  class="hide"  id="photo">
+       </div> 
            
     <div class="form-group center" >
-        <?= Html::submitButton($model->isNewRecord ? '提交' : '保存', ['class' => $model->isNewRecord ? 'btn btn-warning' : 'btn btn-warning']) ?>
+        <?= Html::submitButton($model->isNewRecord ? '提交' : '保存', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
     </div>
     </div>
     <?php ActiveForm::end(); ?>
 </div>
 
 <script type="text/javascript">
+
+$('.img-container').click(function(){
+    $('#photo').click();
+});
+
+document.getElementById('photo').addEventListener('change', function () {
+    var that = this;
+    lrz(that.files[0], {
+        width: 300
+    })
+        .then(function (rst) {
+            var img        = new Image();            
+            img.className='img-responsive';
+            img.src = rst.base64;    
+            img.onload = function () {
+           	 $('.img-container').html(img);
+            };                 
+            return rst;
+        });
+});
 
 function check(){
 	  var required=0;
