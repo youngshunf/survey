@@ -48,7 +48,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 'buttons'=>[
                     'taskview'=>function ($url,$model,$key){
                     $task=Task::findOne(['task_guid'=>$model->task_guid]);
-                    return Html::a('任务详情 | ',['task/view','id'=>$task->id],['title'=>'任务详情']);
+                    if(!empty($task))
+                     return Html::a('任务详情 | ',['task/view','id'=>$task->id],['title'=>'任务详情']);
                     } ,
                     'task/view-answer-detail'=>function ($url,$model,$key){
                     return Html::a('任务结果  ',$url,['title'=>'任务详情']);
