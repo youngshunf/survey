@@ -99,7 +99,17 @@ $this->registerCssFile('@web/css/mui.min.css');
 		var data_info = <?= json_encode($data)?>;
         console.log(data_info);
 		for(var i=0;i<data_info.length;i++){
-			var marker = new BMap.Marker(new BMap.Point(data_info[i][0],data_info[i][1]));  // 创建标注
+			var marker;
+			if(data_info[i][3]==1){
+				var pt=new BMap.Point(data_info[i][0],data_info[i][1]);
+				var myIcon = new BMap.Icon("http://images.suoxinmr.com/done.png", new BMap.Size(25,35));
+				marker = new BMap.Marker(pt,{icon:myIcon}); 
+				marker.setIcon(myIcon);
+				
+			}else{
+				marker = new BMap.Marker(new BMap.Point(data_info[i][0],data_info[i][1]));  // 创建标注
+			}
+			marker = new BMap.Marker(new BMap.Point(data_info[i][0],data_info[i][1]));  // 创建标注
 			var content = data_info[i][2];
 			map.addOverlay(marker);               // 将标注添加到地图中
 			addClickHandler(content,marker);

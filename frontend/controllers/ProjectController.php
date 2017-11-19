@@ -23,6 +23,7 @@ use common\models\Group;
 use yii\helpers\Url;
 use frontend\models\ProjectForm;
 use yii\data\ActiveDataProvider;
+use common\models\ImageUploader;
 
 /**
  * ProjectController implements the CRUD actions for Project model.
@@ -85,10 +86,12 @@ class ProjectController extends Controller
 //         $searchModel->post_type=1;
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $task=Task::findOne(['project_id'=>$model->id]);
+        $questionDataProvider=[];
+        if(!empty($task)){
         $questionDataProvider=new ActiveDataProvider([
             'query'=>Question::find()->andWhere(['task_guid'=>$task->task_guid])->orderBy('code asc'),
         ]);
-        
+        }
         return $this->render('view', [
             'model' => $model,
             'searchModel' => $searchModel,

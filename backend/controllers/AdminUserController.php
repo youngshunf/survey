@@ -10,6 +10,8 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use common\models\CommonUtil;
 use yii\filters\AccessControl;
+use yii\data\ActiveDataProvider;
+use common\models\LoginRec;
 
 /**
  * AdminUserController implements the CRUD actions for AdminUser model.
@@ -29,12 +31,7 @@ public function behaviors()
                     ],
                 ],
             ],
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'delete' => ['post'],
-                ],
-            ],
+           
         ];
     }
 
@@ -62,6 +59,18 @@ public function behaviors()
     
         return $this->render('sp-user', [
             'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+    
+    public function actionLoginRec($id)
+    {
+        $model=AdminUser::findOne($id);
+        $dataProvider = new ActiveDataProvider([
+            'query'=>LoginRec::find()->andWhere(['user_guid'=>$model->user_guid])->orderBy('time desc')
+        ]);
+        
+        return $this->render('login-rec', [
             'dataProvider' => $dataProvider,
         ]);
     }
@@ -144,7 +153,7 @@ public function behaviors()
     {
         $this->findModel($id)->delete();
         yii::$app->getSession()->setFlash('success','删除成功!');
-        return $this->redirect(['sp-user']);
+        return $this->redirect(yii::$app->request->referrer);
     }
 
     /**

@@ -43,7 +43,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             ['class' => 'yii\grid\ActionColumn',
               'header'=>'操作',
-               'template'=>'{view}{update}',
+               'template'=>'{view}{update}{delete}',
                 'buttons'=>[
                        'view'=>function ($url,$model,$keyl){
                        return Html::a('查看 | ',$url,['title'=>'查看详情']);
@@ -53,9 +53,10 @@ $this->params['breadcrumbs'][] = $this->title;
                             return Html::a('修改  ',$url,['title'=>'修改']);
                         }
                       },
-                    /*   'delete'=>function ($key,$url,$model){
-                      return Html::a('删除 | ',$url,['title'=>'查看详情']);
-                      }, */
+                      'delete'=>function ($url,$model,$key){
+                       if(yii::$app->user->identity->role_id==89 || yii::$app->user->identity->role_id==88)
+                           return Html::a('删除 | ',$url,['title'=>'查看详情','data'=>['confirm'=>'您确定要删除此用户吗?','method'=>'post']]);
+                      }, 
                     ]
             ],
         ],

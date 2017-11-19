@@ -363,7 +363,10 @@ $this->params['breadcrumbs'][] = $this->title;
          <?= Html::a('批量审核通过', ['batch-pass','project_id'=>$model->id], ['class' => 'btn btn-warning']) ?>
          <?= Html::a('批量导出结果', ['batch-export-answer','project_id'=>$model->id], ['class' => 'btn btn-warning']) ?>
          <?= Html::a('批量导出EXCEL', ['batch-export-excel','project_id'=>$model->id], ['class' => 'btn btn-warning']) ?>
-         <?= Html::a('批量下线', ['batch-off-line','project_id'=>$model->id], ['class' => 'btn btn-warning']) ?>
+         <?= Html::a('批量下线', ['batch-off-line','project_id'=>$model->id], ['class' => 'btn btn-warning', 'data' => [
+                'confirm' => '您确定批量下线吗?',
+                'method' => 'post',
+            ]]) ?>
        
        <button class="btn btn-warning" onClick="onLine(<?= $model->id?>)">批量上线</button>
        </p>   
@@ -415,7 +418,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\ActionColumn',
             'header'=>'操作',
             'options'=>['width'=>'250px'],
-            'template'=>'{task/recommend}{task/auth-pass}{task/auth-deny}{task/view}{task/update}{task/delete}{task/view-answer}{task/off-line}{task/on-line}',
+            'template'=>'{task/recommend}{task/auth-pass}{task/auth-deny}{task/view}{task/update}{task/delete}{task/view-answer}{task/copy-task}{task/off-line}{task/on-line}',
             'buttons'=>[
               'task/recommend'=>function ($url,$model,$key){
                  if($model->status==2&&$model->is_recommend==0){
@@ -449,6 +452,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 'task/view-answer'=>function ($url,$model,$key){
                 return Html::a('任务结果 | ',$url,['title'=>'任务结果']);
                 },
+                'task/copy-task'=>function ($url,$model,$key){
+                return Html::a('复制任务 | ',$url,['title'=>'复制任务']);
+                },
                 'task/off-line'=>function ($url,$model,$key){
                 if($model->status==2)
                     return Html::a('下线',$url,['title'=>'下线任务','data'=>['confirm'=>'您确定要下线此任务吗?','method'=>'post']]);
@@ -457,6 +463,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 if($model->status==3)
                     return Html::a('上线','javascript:;',['title'=>'上线任务','onClick'=>"onLine($model->id)"]);
                 },
+               
                 ]
             ],
         ],

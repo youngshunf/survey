@@ -41,7 +41,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             ['class' => 'yii\grid\ActionColumn',
               'header'=>'操作',
-               'template'=>'{view}{update}{delete}',
+               'template'=>'{view}{update}{delete}{login-rec}',
                 'buttons'=>[
                        'view'=>function ($url,$model,$keyl){
                        return Html::a('查看 | ',$url,['title'=>'查看详情']);
@@ -52,8 +52,11 @@ $this->params['breadcrumbs'][] = $this->title;
                         }
                       },
                       'delete'=>function ($url,$model,$key){
-                      return Html::a('删除 ',$url,['title'=>'删除','data'=>['confirm'=>'您确定要删除此用户吗?','method'=>'post']]);
-                      }
+                      return Html::a('删除 |',$url,['title'=>'删除','data'=>['confirm'=>'您确定要删除此用户吗?','method'=>'post']]);
+                      },
+                      'login-rec'=>function ($url,$model,$key){
+                      return Html::a('登录日志',$url,['title'=>'登录日志']);
+                      }, 
                     ]
             ],
         ],

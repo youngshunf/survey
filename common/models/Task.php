@@ -47,7 +47,7 @@ class Task extends \yii\db\ActiveRecord
             [['type', 'number', 'radius','do_radius', 'name','do_type',  'province', 'city', 'district', 'address','end_time','price','max_times','is_show_price'],'required','on'=>['create','update']],
             [[ 'number', 'radius', 'status', 'group_id','do_radius','do_type','answer_radius','answer_type','max_times','type','is_show_price'], 'integer'], 
             [['price', 'total_price','group_id'], 'number'],
-            [['end_time'],'safe'],
+            [['end_time','taskno','shop'],'safe'],
             [['name','province', 'city', 'district', 'address'], 'string', 'max' => 255],
             
         ];

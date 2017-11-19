@@ -84,7 +84,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\ActionColumn',
             'header'=>'操作',
             'options'=>['width'=>'250px'],
-            'template'=>'{view}{update}{delete}{view-answer}{off-line}{on-line}',
+            'template'=>'{view}{update}{delete}{view-answer}{copy-task}{off-line}{on-line}',
             'buttons'=>[
                 'view'=>function ($url,$model,$key){
                 if(yii::$app->user->identity->role_id==89 ||yii::$app->user->identity->role_id==88)
@@ -102,6 +102,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 'delete'=>function ($url,$model,$key){
                    if(yii::$app->user->identity->role_id==89 ||yii::$app->user->identity->role_id==88)
                      return Html::a('删除 | ',$url,['title'=>'删除','data'=>['confirm'=>'您确定要删除此任务吗?','method'=>'post']]);
+                },
+                'copy-task'=>function ($url,$model,$key){
+                if(yii::$app->user->identity->role_id==89 ||yii::$app->user->identity->role_id==88)
+                    return Html::a('复制任务 | ',$url,['title'=>'复制任务']);
                 },
             
                 'view-answer'=>function ($url,$model,$key){

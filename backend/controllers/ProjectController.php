@@ -195,7 +195,12 @@ class ProjectController extends Controller
 						</div>
 				</li>
 			</ul>";
-            $data[$k]=[@$v['lng'],@$v['lat'],$content];
+            $isSubmit=0;
+            $answer=Answer::findOne(['task_guid'=>$v['task_guid']]);
+            if(!empty($answer) && !empty($answer->end_time)){
+                $isSubmit=1;
+            }
+            $data[$k]=[@$v['lng'],@$v['lat'],$content,$isSubmit];
         }
     
         return $this->render('view-map',[

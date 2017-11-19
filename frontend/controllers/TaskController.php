@@ -70,7 +70,7 @@ class TaskController extends Controller
         $searchModel = new SearchTask();
         $searchModel->post_type=2;
         $searchModel->user_guid=$user->user_guid;
-        if($user->role_id==88 ||$user->role_id==87||$user->role_id==86){
+        if($user->role_id==89 || $user->role_id==88 ||$user->role_id==87||$user->role_id==86){
             $searchModel->user_guid=$user->parent_user;
         }
 

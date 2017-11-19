@@ -38,7 +38,7 @@ $this->registerJsFile('@web/js/PCASClass.js', ['position'=> View::POS_HEAD]);
     <?= $form->field($model, 'do_type')->dropDownList(['2'=>'四处跑','1'=>'宅在家']) ?>
     <?= $form->field($model, 'max_times')->textInput(['maxlength'=>8]) ?>
      <?= $form->field($model, 'number')->textInput(['maxlength' => 5]) ?>
-          <?= $form->field($model, 'is_show_price')->dropDownList(['0'=>'否','1'=>'是'])?>
+      <?= $form->field($model, 'is_show_price')->dropDownList(['0'=>'否','1'=>'是'])?>
     <?php  //$form->field($model, 'province')->textInput(['maxlength'=>32])?>
 
     <?php //$form->field($model, 'city')->textInput(['maxlength'=>32])?>

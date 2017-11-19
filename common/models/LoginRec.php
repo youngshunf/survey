@@ -53,4 +53,8 @@ class LoginRec extends \yii\db\ActiveRecord
             'lat' => 'Lat',
         ];
     }
+    
+    public function getAdminuser(){
+        return $this->hasOne(AdminUser::className(), ['user_guid'=>'user_guid']);
+    }
 }

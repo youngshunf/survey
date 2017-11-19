@@ -4,6 +4,8 @@ namespace frontend\models;
 use Yii;
 use yii\base\Model;
 use common\models\AdminUser;
+use common\models\LoginRec;
+use common\models\CommonUtil;
 
 /**
  * Login form
@@ -60,6 +62,14 @@ class LoginForm extends Model
 	            $user->last_ip=yii::$app->request->getUserIP();
 	            $user->last_time=time();
 	            $user->save();
+	            $loinRec=new LoginRec();
+	            $loinRec->user_guid=$user->user_guid;
+	            $loinRec->ip=yii::$app->request->getUserIP();
+	            $loinRec->ua=yii::$app->request->getUserAgent();
+	            $loinRec->time=time();
+	            $address=CommonUtil::GetIpLookup($loinRec->ip);
+	            $loinRec->address=@$address['country'].@$address['provnice'].@$address['city'].@$address['district'];
+	            $loinRec->save();
             }else{
             	$this->addError($attribute, '该用户没有登录权限');
             }

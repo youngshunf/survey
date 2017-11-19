@@ -57,6 +57,10 @@ class SearchAdminUser extends AdminUser
         if(!empty($this->role)){
             $query->andWhere([
                 'role_id' => $this->role,
+            ]);
+        }
+        if(!empty($this->parent_user)){
+            $query->andWhere([
                 'parent_user'=>$this->parent_user
             ]);
         }

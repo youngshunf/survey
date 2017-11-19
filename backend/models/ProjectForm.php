@@ -120,6 +120,11 @@ class ProjectForm extends Model
         $project=new Project();
         $project->user_guid=$user_guid;
         $project->name=$this->name;
+        $oldproj=Project::findOne(['name'=>$project->name]);
+        if(!empty($oldproj)){
+            yii::$app->getSession()->setFlash('error','项目创建失败,项目名称重复！');
+            return false;
+        }
         $project->shop=$this->shop;
         $project->created_at=time();
         if($project->save()){
@@ -150,7 +155,7 @@ class ProjectForm extends Model
                 continue;
             }
             
-            $temp=trim($record['E']);
+            $temp=trim($record['A']);
             if(empty($temp)){
                 continue;
             }
@@ -167,21 +172,21 @@ class ProjectForm extends Model
             $task->do_radius=$this->do_radius;
             $task->answer_radius=$this->answer_radius;
             $task->price=$this->price;
+            $task->max_times=$this->max_times;
             $task->number=$this->number;
             $task->province=trim($record['B']);
             $task->city=trim($record['C']);
             $task->district=trim($record['D']);
-            $task->shop=trim($record['E']);
+            $task->shop=trim(@$record['E']);
             $task->address=trim($record['F']);
-            $F=trim($record['G']);
-            $task->end_time=empty($F)?strtotime($this->end_time):strtotime(trim($record['G']));
+            $task->end_time=empty($record['G'])?strtotime($this->end_time):strtotime(trim($record['G']));
             $task->desc=@$_POST['desc'];
             $task->taskno=@trim($record['H']);
-            if(!empty(trim($record['I']))){
+            if(!empty($record['I'])){
                 $task->price=trim($record['I']);
             }
             
-            if(!empty(trim($record['J']))){
+            if(!empty($record['J'])){
                 $task->desc=trim($record['J']);
             }
             
@@ -208,7 +213,7 @@ class ProjectForm extends Model
             }
              
             if(!$task->save()){
-                yii::$app->getSession()->setFlash('success','导入地址失败,请检查导入模板是佛正确!');
+                yii::$app->getSession()->setFlash('error','导入地址失败,请检查导入模板是否正确!');
                return false;
             }
              $result++;

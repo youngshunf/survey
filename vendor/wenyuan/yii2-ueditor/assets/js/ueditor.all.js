@@ -8061,8 +8061,9 @@ UE.Editor.defaultOptions = function(editor){
                 me.options.imageUrl && me.setOpt('serverUrl', me.options.imageUrl.replace(/^(.*[\/]).+([\.].+)$/, '$1controller$2'));
 
                 var configUrl = me.getActionUrl('config'),
+                
                     isJsonp = utils.isCrossDomainUrl(configUrl);
-
+                console.log(configUrl,isJsonp);
                 /* 发出ajax请求 */
                 me._serverConfigLoaded = false;
 
@@ -8070,8 +8071,10 @@ UE.Editor.defaultOptions = function(editor){
                     'method': 'GET',
                     'dataType': isJsonp ? 'jsonp':'',
                     'onsuccess':function(r){
+                    	console.log(r);
                         try {
                             var config = isJsonp ? r:eval("("+r.responseText+")");
+                            console.log(config);
                             utils.extend(me.options, config);
                             me.fireEvent('serverConfigLoaded');
                             me._serverConfigLoaded = true;
